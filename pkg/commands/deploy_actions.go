@@ -47,7 +47,7 @@ type ChainInfo struct {
 
 func StartDeployL1Action(cCtx *cli.Context) error {
 	// Get logger
-	logger := common.LoggerFromContext(cCtx.Context)
+	logger := common.LoggerFromContext(cCtx)
 	caser := cases.Title(language.English)
 
 	// Extract vars
@@ -118,43 +118,10 @@ func StartDeployL1Action(cCtx *cli.Context) error {
 		}
 	}
 
-	// Get fork_urls for the provided network (default to sepolia testnet)
-	l1ForkUrl, err := common.GetForkUrlDefault(contextName, cfg, common.L1)
-	if err != nil {
-		return fmt.Errorf("L1 fork URL error %w", err)
-	}
-	l2ForkUrl, err := common.GetForkUrlDefault(contextName, cfg, common.L2)
-	if err != nil {
-		return fmt.Errorf("L2 fork URL error: %w", err)
-	}
-
 	// Get chains node
 	chainsNode := common.GetChildByKey(contextNode, "chains")
 	if chainsNode == nil {
 		return fmt.Errorf("missing 'chains' key in context")
-	}
-
-	// Update RPC URLs for L1 chain
-	l1ChainNode := common.GetChildByKey(chainsNode, common.L1)
-	if l1ChainNode != nil {
-		l1RpcUrlNode := common.GetChildByKey(l1ChainNode, "rpc_url")
-		if l1RpcUrlNode != nil {
-			l1RpcUrlNode.Value = l1ForkUrl
-		}
-	}
-
-	// Update RPC URLs for L2 chain
-	l2ChainNode := common.GetChildByKey(chainsNode, common.L2)
-	if l2ChainNode != nil {
-		l2RpcUrlNode := common.GetChildByKey(l2ChainNode, "rpc_url")
-		if l2RpcUrlNode != nil {
-			l2RpcUrlNode.Value = l2ForkUrl
-		}
-	}
-
-	// Write yaml back to project directory
-	if err := common.WriteYAML(yamlPath, rootNode); err != nil {
-		return err
 	}
 
 	// Deploy the contracts after starting devnet unless skipped
@@ -211,7 +178,7 @@ func StartDeployL1Action(cCtx *cli.Context) error {
 
 func StartDeployL2Action(cCtx *cli.Context) error {
 	// Get logger
-	logger := common.LoggerFromContext(cCtx.Context)
+	logger := common.LoggerFromContext(cCtx)
 	caser := cases.Title(language.English)
 
 	// Load config for selected context
@@ -315,7 +282,7 @@ func StartDeployL2Action(cCtx *cli.Context) error {
 
 func DeployL1ContractsAction(cCtx *cli.Context) error {
 	// Get logger
-	logger := common.LoggerFromContext(cCtx.Context)
+	logger := common.LoggerFromContext(cCtx)
 	caser := cases.Title(language.English)
 
 	// Check if docker is running, else try to start it
@@ -440,7 +407,7 @@ func DeployL1ContractsAction(cCtx *cli.Context) error {
 
 func DeployL2ContractsAction(cCtx *cli.Context) error {
 	// Get logger
-	logger := common.LoggerFromContext(cCtx.Context)
+	logger := common.LoggerFromContext(cCtx)
 	caser := cases.Title(language.English)
 
 	// Check if docker is running, else try to start it
@@ -824,7 +791,7 @@ func RegisterOperatorsToAvsFromConfigAction(cCtx *cli.Context, logger iface.Logg
 }
 
 func FetchZeusAddressesAction(cCtx *cli.Context) error {
-	logger := common.LoggerFromContext(cCtx.Context)
+	logger := common.LoggerFromContext(cCtx)
 
 	// Extract vars
 	contextName := cCtx.String("context")
@@ -858,7 +825,7 @@ func FetchZeusAddressesAction(cCtx *cli.Context) error {
 }
 
 func extractContractOutputs(cCtx *cli.Context, context string, contractsList []DeployContractTransport, chainId string) error {
-	logger := common.LoggerFromContext(cCtx.Context)
+	logger := common.LoggerFromContext(cCtx)
 
 	// Push contract artefacts to ./contracts/outputs
 	outDir := filepath.Join("contracts", "outputs", context)
