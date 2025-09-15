@@ -16,7 +16,6 @@ import (
 	"github.com/Layr-Labs/devkit-cli/pkg/common/output"
 	"gopkg.in/yaml.v3"
 
-	ethcommon "github.com/ethereum/go-ethereum/common"
 	gethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
@@ -328,16 +327,12 @@ func getAVSSetup(cCtx *cli.Context) (*common.AvsConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	registrar, err := getRegistrarAddress(cCtx)
-	if err != nil {
-		return nil, err
-	}
 
 	cfg := &common.AvsConfig{
 		Address:          address,
 		AVSPrivateKey:    privateKey,
 		MetadataUri:      metadataURL,
-		RegistrarAddress: registrar,
+		RegistrarAddress: "",
 	}
 
 	return cfg, nil
@@ -392,26 +387,6 @@ func getAVSMetadataURL(cCtx *cli.Context) (string, error) {
 		return "", fmt.Errorf("invalid AVS metadata URL: %w", err)
 	}
 	return u, nil
-}
-
-func getRegistrarAddress(cCtx *cli.Context) (string, error) {
-	addr := cCtx.String("registrar-address")
-	if addr == "" {
-		val, err := output.InputString(
-			"Enter Registrar contract address",
-			"The on chain registrar contract address, 0x prefixed",
-			"",
-			validateEthAddress,
-		)
-		if err != nil {
-			return "", fmt.Errorf("failed to get registrar address: %w", err)
-		}
-		return val, nil
-	}
-	if err := validateEthAddress(addr); err != nil {
-		return "", fmt.Errorf("invalid registrar address: %w", err)
-	}
-	return addr, nil
 }
 
 func CreateContext(
@@ -543,16 +518,6 @@ func validatePrivateKey(input string) error {
 	keyPattern := regexp.MustCompile(`^(0x)?[0-9a-fA-F]{64}$`)
 	if !keyPattern.MatchString(input) {
 		return fmt.Errorf("private key must be 64 hex characters, optionally prefixed with 0x")
-	}
-	return nil
-}
-
-func validateEthAddress(input string) error {
-	if input == "" {
-		return fmt.Errorf("address cannot be empty")
-	}
-	if !ethcommon.IsHexAddress(input) {
-		return fmt.Errorf("must be a valid 0x prefixed EVM address")
 	}
 	return nil
 }
