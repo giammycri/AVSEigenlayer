@@ -174,16 +174,36 @@ func (b *OCIArtifactBuilder) CreateEigenRuntimeArtifact(
 				return auth.Credential{}, nil
 			}
 
-			// Get the credentials store
-			store := credentials.NewNativeStore(cfg, cfg.CredentialsStore)
+			// Try 1: Get auth directly from config file
+			authConfig, err := cfg.GetAuthConfig(reg)
 
-			// Try to get credentials for the registry
-			authConfig, err := store.Get(reg)
+			// Try 2: If that didn't work and we have a credential store, try the native store
+			if (authConfig.Username == "" && authConfig.Password == "") && cfg.CredentialsStore != "" {
+				b.logger.Debug("No auth in config file, trying credential store")
+
+				// For native store, normalize to the exact key used in GitHub Actions
+				registryToLookup := reg
+				if reg == "docker.io" || reg == "registry-1.docker.io" {
+					registryToLookup = "https://index.docker.io/v1/"
+				}
+
+				store := credentials.NewNativeStore(cfg, cfg.CredentialsStore)
+				authConfig, err = store.Get(registryToLookup)
+			}
+
 			if err != nil {
 				b.logger.Debug("No credentials found for registry %s: %v", reg, err)
 				// Return empty credentials for anonymous access
 				return auth.Credential{}, nil
 			}
+
+			if authConfig.Username == "" && authConfig.Password == "" {
+				b.logger.Debug("Empty credentials for registry %s", reg)
+				// Return empty credentials for anonymous access
+				return auth.Credential{}, nil
+			}
+
+			b.logger.Debug("Found credentials for registry %s - Username: %s", reg, authConfig.Username)
 
 			// Convert to oras auth.Credential
 			cred := auth.Credential{
@@ -194,6 +214,7 @@ func (b *OCIArtifactBuilder) CreateEigenRuntimeArtifact(
 			// Handle token-based auth (e.g., for Docker Hub)
 			if authConfig.IdentityToken != "" {
 				cred.RefreshToken = authConfig.IdentityToken
+				cred.AccessToken = authConfig.RegistryToken
 			}
 
 			return cred, nil
