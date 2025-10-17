@@ -196,10 +196,30 @@ func contextCreateAction(cCtx *cli.Context) error {
 			logger.Info("Continuing with addresses from config...")
 		} else {
 			logger.Info("Successfully updated context with addresses from Zeus")
-			if err := common.WriteYAML(yamlPath, rootNode); err != nil {
-				return fmt.Errorf("failed to save updated context: %v", err)
-			}
 		}
+	}
+
+	// Place middleware addresses into context
+	bn254TableCalculator := common.SEPOLIA_BN254_TABLE_CALCULATOR_ADDRESS
+	ecdsaTableCalculator := common.SEPOLIA_ECDSA_TABLE_CALCULATOR_ADDRESS
+	if int(l1ChainID.Uint64()) == 1 {
+		bn254TableCalculator = common.MAINNET_BN254_TABLE_CALCULATOR_ADDRESS
+		ecdsaTableCalculator = common.MAINNET_ECDSA_TABLE_CALCULATOR_ADDRESS
+	}
+	bn254TableCalculatorPath := "eigenlayer.l1.bn254_table_calculator"
+	ecdsaTableCalculatorPath := "eigenlayer.l1.ecdsa_table_calculator"
+	_, err = common.WriteToPath(contextNode, strings.Split(bn254TableCalculatorPath, "."), bn254TableCalculator)
+	if err != nil {
+		return fmt.Errorf("setting value %s to %s failed: %w", bn254TableCalculatorPath, bn254TableCalculator, err)
+	}
+	_, err = common.WriteToPath(contextNode, strings.Split(ecdsaTableCalculatorPath, "."), ecdsaTableCalculator)
+	if err != nil {
+		return fmt.Errorf("setting value %s to %s failed: %w", ecdsaTableCalculatorPath, ecdsaTableCalculator, err)
+	}
+
+	// Save all updates to the yaml file
+	if err := common.WriteYAML(yamlPath, rootNode); err != nil {
+		return fmt.Errorf("failed to save updated context: %v", err)
 	}
 
 	logContextCreated(logger, cntxDir, name, ctxDoc, cCtx.Bool("use"))
