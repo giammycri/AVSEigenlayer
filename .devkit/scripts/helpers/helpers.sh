@@ -75,23 +75,20 @@ function ensureAbigen() {
 
 # Pass in RPC_URL ($1)
 function ensureDockerHost() {
-    # Detect OS and default DOCKERS_HOST when not provided
-    if [[ "$(uname)" == "Linux" ]]; then
-        # Lookup the host using iproute
-        DOCKERS_HOST=${DOCKERS_HOST:-$(ip addr show docker0 | awk '/inet /{print $2}' | cut -d/ -f1)}
+    local url="$1"
+    
+    # Replace localhost with appropriate container names for Docker networking
+    if [[ "$url" == *"localhost:8545"* ]]; then
+        echo "$url" | sed 's|localhost:8545|devkit-devnet-l1-my-avs-project:8545|g'
+    elif [[ "$url" == *"localhost:9545"* ]]; then
+        echo "$url" | sed 's|localhost:9545|devkit-devnet-l2-my-avs-project:9545|g'
+    elif [[ "$url" == *"127.0.0.1:8545"* ]]; then
+        echo "$url" | sed 's|127.0.0.1:8545|devkit-devnet-l1-my-avs-project:8545|g'
+    elif [[ "$url" == *"127.0.0.1:9545"* ]]; then
+        echo "$url" | sed 's|127.0.0.1:9545|devkit-devnet-l2-my-avs-project:9545|g'
     else
-        DOCKERS_HOST=${DOCKERS_HOST:-host.docker.internal}
+        echo "$url"
     fi
-
-    # Replace localhost/127.0.0.1 in RPC_URL with docker equivalent for environment
-    DOCKER_RPC_URL=$(
-    echo "$1" |
-    sed -E \
-        -e "s#(https?://)(localhost|127\.0\.0\.1)(:[0-9]+)?#\1${DOCKERS_HOST}\3#g"
-    )
-
-    # Return properly formed RPC url
-    echo $DOCKER_RPC_URL
 }
 
 # Function to get current nonce from provider for an address

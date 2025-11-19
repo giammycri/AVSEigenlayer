@@ -1,42 +1,16 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.27;
 
-import {IAVSTaskHook} from "@eigenlayer-contracts/src/contracts/interfaces/IAVSTaskHook.sol";
-import {ITaskMailboxTypes} from "@eigenlayer-contracts/src/contracts/interfaces/ITaskMailbox.sol";
+/// @title AVSTaskHook
+/// @notice Hook contract for AVS tasks on L2. Extend with your logic as needed.
+contract AVSTaskHook {
+    // Event emitted when a task is hooked
+    event TaskHooked(address indexed sender, bytes data);
 
-contract AVSTaskHook is IAVSTaskHook {
-    function validatePreTaskCreation(
-        address, /*caller*/
-        ITaskMailboxTypes.TaskParams memory /*taskParams*/
-    ) external view {
-        //TODO: Implement
-    }
-
-    function handlePostTaskCreation(
-        bytes32 /*taskHash*/
-    ) external {
-        //TODO: Implement
-    }
-
-    function validatePreTaskResultSubmission(
-        address, /*caller*/
-        bytes32, /*taskHash*/
-        bytes memory, /*cert*/
-        bytes memory /*result*/
-    ) external view {
-        //TODO: Implement
-    }
-
-    function handlePostTaskResultSubmission(
-        address, /*caller*/
-        bytes32 /*taskHash*/
-    ) external {
-        //TODO: Implement
-    }
-
-    function calculateTaskFee(
-        ITaskMailboxTypes.TaskParams memory /*taskParams*/
-    ) external view returns (uint96) {
-        //TODO: Implement
+    /// @notice Example hook function
+    /// @param data Arbitrary data for the task
+    function hookTask(bytes calldata data) external {
+        emit TaskHooked(msg.sender, data);
+        // Qui puoi aggiungere la logica di gestione del task
     }
 }

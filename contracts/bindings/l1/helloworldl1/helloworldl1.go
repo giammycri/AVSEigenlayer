@@ -29,10 +29,21 @@ var (
 	_ = abi.ConvertType
 )
 
+// HelloWorldL1SumVerificationTask is an auto generated low-level Go binding around an user-defined struct.
+type HelloWorldL1SumVerificationTask struct {
+	A             *big.Int
+	B             *big.Int
+	ClaimedResult *big.Int
+	Requester     common.Address
+	Verified      bool
+	IsCorrect     bool
+	Timestamp     *big.Int
+}
+
 // HelloWorldL1MetaData contains all meta data concerning the HelloWorldL1 contract.
 var HelloWorldL1MetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"getMessage\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"string\",\"internalType\":\"string\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"setMessage\",\"inputs\":[{\"name\":\"newMessage\",\"type\":\"string\",\"internalType\":\"string\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"}]",
-	Bin: "0x60c0604052601360809081527f48656c6c6f20576f726c642066726f6d204c310000000000000000000000000060a0525f9061003b90826100e5565b50348015610047575f5ffd5b5061019f565b634e487b7160e01b5f52604160045260245ffd5b600181811c9082168061007557607f821691505b60208210810361009357634e487b7160e01b5f52602260045260245ffd5b50919050565b601f8211156100e057805f5260205f20601f840160051c810160208510156100be5750805b601f840160051c820191505b818110156100dd575f81556001016100ca565b50505b505050565b81516001600160401b038111156100fe576100fe61004d565b6101128161010c8454610061565b84610099565b6020601f821160018114610144575f831561012d5750848201515b5f19600385901b1c1916600184901b1784556100dd565b5f84815260208120601f198516915b828110156101735787850151825560209485019460019092019101610153565b508482101561019057868401515f19600387901b60f8161c191681555b50505050600190811b01905550565b61037a806101ac5f395ff3fe608060405234801561000f575f5ffd5b5060043610610034575f3560e01c8063368b877214610038578063ce6d41de1461004d575b5f5ffd5b61004b61004636600461011d565b61006b565b005b61005561007a565b60405161006291906101d0565b60405180910390f35b5f6100768282610289565b5050565b60605f805461008890610205565b80601f01602080910402602001604051908101604052809291908181526020018280546100b490610205565b80156100ff5780601f106100d6576101008083540402835291602001916100ff565b820191905f5260205f20905b8154815290600101906020018083116100e257829003601f168201915b5050505050905090565b634e487b7160e01b5f52604160045260245ffd5b5f6020828403121561012d575f5ffd5b813567ffffffffffffffff811115610143575f5ffd5b8201601f81018413610153575f5ffd5b803567ffffffffffffffff81111561016d5761016d610109565b604051601f8201601f19908116603f0116810167ffffffffffffffff8111828210171561019c5761019c610109565b6040528181528282016020018610156101b3575f5ffd5b816020840160208301375f91810160200191909152949350505050565b602081525f82518060208401528060208501604085015e5f604082850101526040601f19601f83011684010191505092915050565b600181811c9082168061021957607f821691505b60208210810361023757634e487b7160e01b5f52602260045260245ffd5b50919050565b601f82111561028457805f5260205f20601f840160051c810160208510156102625750805b601f840160051c820191505b81811015610281575f815560010161026e565b50505b505050565b815167ffffffffffffffff8111156102a3576102a3610109565b6102b7816102b18454610205565b8461023d565b6020601f8211600181146102e9575f83156102d25750848201515b5f19600385901b1c1916600184901b178455610281565b5f84815260208120601f198516915b8281101561031857878501518255602094850194600190920191016102f8565b508482101561033557868401515f19600387901b60f8161c191681555b50505050600190811b0190555056fea2646970667358221220e16330b110681d990334c92cd0bebfe5317d0b89825e733f858c6f1410b83b1a64736f6c634300081b0033",
+	ABI: "[{\"type\":\"constructor\",\"inputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"completeSumVerification\",\"inputs\":[{\"name\":\"taskId\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"isCorrect\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"getTask\",\"inputs\":[{\"name\":\"taskId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple\",\"internalType\":\"structHelloWorldL1.SumVerificationTask\",\"components\":[{\"name\":\"a\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"b\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"claimedResult\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"requester\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"verified\",\"type\":\"bool\",\"internalType\":\"bool\"},{\"name\":\"isCorrect\",\"type\":\"bool\",\"internalType\":\"bool\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"isTaskVerified\",\"inputs\":[{\"name\":\"taskId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"requestSumVerification\",\"inputs\":[{\"name\":\"a\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"b\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"claimedResult\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"taskId\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"taskCounter\",\"inputs\":[],\"outputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"tasks\",\"inputs\":[{\"name\":\"\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"a\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"b\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"claimedResult\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"requester\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"verified\",\"type\":\"bool\",\"internalType\":\"bool\"},{\"name\":\"isCorrect\",\"type\":\"bool\",\"internalType\":\"bool\"},{\"name\":\"timestamp\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"verifySumOnChain\",\"inputs\":[{\"name\":\"a\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"b\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"result\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"\",\"type\":\"bool\",\"internalType\":\"bool\"}],\"stateMutability\":\"pure\"},{\"type\":\"event\",\"name\":\"SumVerificationCompleted\",\"inputs\":[{\"name\":\"taskId\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"isCorrect\",\"type\":\"bool\",\"indexed\":false,\"internalType\":\"bool\"},{\"name\":\"actualResult\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"SumVerificationRequested\",\"inputs\":[{\"name\":\"taskId\",\"type\":\"uint256\",\"indexed\":true,\"internalType\":\"uint256\"},{\"name\":\"requester\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"a\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"b\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"claimedResult\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false}]",
+	Bin: "0x608060405234801561000f575f5ffd5b506100316040518060600160405280602c8152602001610a1a602c9139610036565b6100e7565b61007d8160405160240161004a91906100b2565b60408051601f198184030181529190526020810180516001600160e01b0390811663104c13eb60e21b1790915261008016565b50565b61007d8161009360201b61069f1760201c565b5f6a636f6e736f6c652e6c6f6790505f5f835160208501845afa505050565b602081525f82518060208401528060208501604085015e5f604082850101526040601f19601f83011684010191505092915050565b610926806100f45f395ff3fe608060405234801561000f575f5ffd5b506004361061007a575f3560e01c80636ef6a577116100585780636ef6a577146101225780638d9776721461014557806394b7a9bf146101e1578063d8fb6f841461020d575f5ffd5b80631d65e77e1461007e5780632ee28d8a146100f85780635867173014610119575b5f5ffd5b61009161008c3660046107a1565b610222565b6040516100ef91908151815260208083015190820152604080830151908201526060808301516001600160a01b03169082015260808083015115159082015260a08083015115159082015260c0918201519181019190915260e00190565b60405180910390f35b61010b6101063660046107b8565b6102e0565b6040519081526020016100ef565b61010b60015481565b6101356101303660046107b8565b6104d6565b60405190151581526020016100ef565b6101a06101533660046107a1565b5f60208190529081526040902080546001820154600283015460038401546004909401549293919290916001600160a01b0381169160ff600160a01b8304811692600160a81b9004169087565b604080519788526020880196909652948601939093526001600160a01b03909116606085015215156080840152151560a083015260c082015260e0016100ef565b6101356101ef3660046107a1565b5f90815260208190526040902060030154600160a01b900460ff1690565b61022061021b3660046107e1565b6104eb565b005b6102686040518060e001604052805f81526020015f81526020015f81526020015f6001600160a01b031681526020015f151581526020015f151581526020015f81525090565b505f9081526020818152604091829020825160e0810184528154815260018201549281019290925260028101549282019290925260038201546001600160a01b038116606083015260ff600160a01b8204811615156080840152600160a81b90910416151560a082015260049091015460c082015290565b600180545f91826102f083610827565b909155506040805160e08101825286815260208082018781528284018781523360608086018281525f6080880181815260a089018281524260c08b019081528c8452838a52928b902099518a55965160018a0155945160028901559051600388018054955196511515600160a81b0260ff60a81b19971515600160a01b026001600160a81b03199097166001600160a01b039093169290921795909517959095169490941790925591516004909401939093558351898152918201889052928101869052929350909183917f74396ec72e1af7caf32d3950fc17c8d8e32f4efe70ee2ec3c327f4091dab1347910160405180910390a36104246040518060400160405280601b81526020017f53756d20766572696669636174696f6e207265717565737465643a00000000008152506106be565b6104506040518060400160405280600a81526020016910102a30b9b59024a21d60b11b81525082610704565b610476604051806040016040528060048152602001631010209d60e11b81525085610704565b61049c604051806040016040528060048152602001631010211d60e11b81525084610704565b6104cf60405180604001604052806011815260200170101021b630b4b6b2b2102932b9bab63a1d60791b81525083610704565b9392505050565b5f816104e2848661083f565b14949350505050565b5f82815260208190526040902060030154600160a01b900460ff161561054f5760405162461bcd60e51b815260206004820152601560248201527415185cdac8185b1c9958591e481d995c9a599a5959605a1b604482015260640160405180910390fd5b5f828152602081905260408120600381018054841515600160a81b0261ffff60a01b1990911617600160a01b1790556001810154905461058f919061083f565b6040805184151581526020810183905291925084917fac2034b96316771cf452968ad23adf2a71e4c283d311ad2b66de9b6f7f91a7dd910160405180910390a261060d6040518060400160405280601b81526020017f53756d20766572696669636174696f6e20636f6d706c657465643a00000000008152506106be565b6106396040518060400160405280600a81526020016910102a30b9b59024a21d60b11b81525084610704565b6106686040518060400160405280600d81526020016c101024b99021b7b93932b1ba1d60991b8152508361074d565b61069a6040518060400160405280601081526020016f101020b1ba3ab0b6102932b9bab63a1d60811b81525082610704565b505050565b5f6a636f6e736f6c652e6c6f6790505f5f835160208501845afa505050565b610701816040516024016106d29190610886565b60408051601f198184030181529190526020810180516001600160e01b031663104c13eb60e21b17905261078e565b50565b610749828260405160240161071a929190610898565b60408051601f198184030181529190526020810180516001600160e01b0316632d839cb360e21b17905261078e565b5050565b61074982826040516024016107639291906108b9565b60408051601f198184030181529190526020810180516001600160e01b031663c3b5563560e01b1790525b6107018161069f565b61079f6108dc565b565b5f602082840312156107b1575f5ffd5b5035919050565b5f5f5f606084860312156107ca575f5ffd5b505081359360208301359350604090920135919050565b5f5f604083850312156107f2575f5ffd5b8235915060208301358015158114610808575f5ffd5b809150509250929050565b634e487b7160e01b5f52601160045260245ffd5b5f6001820161083857610838610813565b5060010190565b8082018082111561085257610852610813565b92915050565b5f81518084528060208401602086015e5f602082860101526020601f19601f83011685010191505092915050565b602081525f6104cf6020830184610858565b604081525f6108aa6040830185610858565b90508260208301529392505050565b604081525f6108cb6040830185610858565b905082151560208301529392505050565b634e487b7160e01b5f52605160045260245ffdfea26469706673582212206bd1a72e79985ad917f689a17ded29919929639fe4a33c90d18b9e49f20a645164736f6c634300081b003348656c6c6f576f726c644c31206465706c6f796564202d2053756d20566572696669636174696f6e20415653",
 }
 
 // HelloWorldL1ABI is the input ABI used to generate the binding from.
@@ -202,54 +213,540 @@ func (_HelloWorldL1 *HelloWorldL1TransactorRaw) Transact(opts *bind.TransactOpts
 	return _HelloWorldL1.Contract.contract.Transact(opts, method, params...)
 }
 
-// GetMessage is a free data retrieval call binding the contract method 0xce6d41de.
+// GetTask is a free data retrieval call binding the contract method 0x1d65e77e.
 //
-// Solidity: function getMessage() view returns(string)
-func (_HelloWorldL1 *HelloWorldL1Caller) GetMessage(opts *bind.CallOpts) (string, error) {
+// Solidity: function getTask(uint256 taskId) view returns((uint256,uint256,uint256,address,bool,bool,uint256))
+func (_HelloWorldL1 *HelloWorldL1Caller) GetTask(opts *bind.CallOpts, taskId *big.Int) (HelloWorldL1SumVerificationTask, error) {
 	var out []interface{}
-	err := _HelloWorldL1.contract.Call(opts, &out, "getMessage")
+	err := _HelloWorldL1.contract.Call(opts, &out, "getTask", taskId)
 
 	if err != nil {
-		return *new(string), err
+		return *new(HelloWorldL1SumVerificationTask), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
+	out0 := *abi.ConvertType(out[0], new(HelloWorldL1SumVerificationTask)).(*HelloWorldL1SumVerificationTask)
 
 	return out0, err
 
 }
 
-// GetMessage is a free data retrieval call binding the contract method 0xce6d41de.
+// GetTask is a free data retrieval call binding the contract method 0x1d65e77e.
 //
-// Solidity: function getMessage() view returns(string)
-func (_HelloWorldL1 *HelloWorldL1Session) GetMessage() (string, error) {
-	return _HelloWorldL1.Contract.GetMessage(&_HelloWorldL1.CallOpts)
+// Solidity: function getTask(uint256 taskId) view returns((uint256,uint256,uint256,address,bool,bool,uint256))
+func (_HelloWorldL1 *HelloWorldL1Session) GetTask(taskId *big.Int) (HelloWorldL1SumVerificationTask, error) {
+	return _HelloWorldL1.Contract.GetTask(&_HelloWorldL1.CallOpts, taskId)
 }
 
-// GetMessage is a free data retrieval call binding the contract method 0xce6d41de.
+// GetTask is a free data retrieval call binding the contract method 0x1d65e77e.
 //
-// Solidity: function getMessage() view returns(string)
-func (_HelloWorldL1 *HelloWorldL1CallerSession) GetMessage() (string, error) {
-	return _HelloWorldL1.Contract.GetMessage(&_HelloWorldL1.CallOpts)
+// Solidity: function getTask(uint256 taskId) view returns((uint256,uint256,uint256,address,bool,bool,uint256))
+func (_HelloWorldL1 *HelloWorldL1CallerSession) GetTask(taskId *big.Int) (HelloWorldL1SumVerificationTask, error) {
+	return _HelloWorldL1.Contract.GetTask(&_HelloWorldL1.CallOpts, taskId)
 }
 
-// SetMessage is a paid mutator transaction binding the contract method 0x368b8772.
+// IsTaskVerified is a free data retrieval call binding the contract method 0x94b7a9bf.
 //
-// Solidity: function setMessage(string newMessage) returns()
-func (_HelloWorldL1 *HelloWorldL1Transactor) SetMessage(opts *bind.TransactOpts, newMessage string) (*types.Transaction, error) {
-	return _HelloWorldL1.contract.Transact(opts, "setMessage", newMessage)
+// Solidity: function isTaskVerified(uint256 taskId) view returns(bool)
+func (_HelloWorldL1 *HelloWorldL1Caller) IsTaskVerified(opts *bind.CallOpts, taskId *big.Int) (bool, error) {
+	var out []interface{}
+	err := _HelloWorldL1.contract.Call(opts, &out, "isTaskVerified", taskId)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
-// SetMessage is a paid mutator transaction binding the contract method 0x368b8772.
+// IsTaskVerified is a free data retrieval call binding the contract method 0x94b7a9bf.
 //
-// Solidity: function setMessage(string newMessage) returns()
-func (_HelloWorldL1 *HelloWorldL1Session) SetMessage(newMessage string) (*types.Transaction, error) {
-	return _HelloWorldL1.Contract.SetMessage(&_HelloWorldL1.TransactOpts, newMessage)
+// Solidity: function isTaskVerified(uint256 taskId) view returns(bool)
+func (_HelloWorldL1 *HelloWorldL1Session) IsTaskVerified(taskId *big.Int) (bool, error) {
+	return _HelloWorldL1.Contract.IsTaskVerified(&_HelloWorldL1.CallOpts, taskId)
 }
 
-// SetMessage is a paid mutator transaction binding the contract method 0x368b8772.
+// IsTaskVerified is a free data retrieval call binding the contract method 0x94b7a9bf.
 //
-// Solidity: function setMessage(string newMessage) returns()
-func (_HelloWorldL1 *HelloWorldL1TransactorSession) SetMessage(newMessage string) (*types.Transaction, error) {
-	return _HelloWorldL1.Contract.SetMessage(&_HelloWorldL1.TransactOpts, newMessage)
+// Solidity: function isTaskVerified(uint256 taskId) view returns(bool)
+func (_HelloWorldL1 *HelloWorldL1CallerSession) IsTaskVerified(taskId *big.Int) (bool, error) {
+	return _HelloWorldL1.Contract.IsTaskVerified(&_HelloWorldL1.CallOpts, taskId)
+}
+
+// TaskCounter is a free data retrieval call binding the contract method 0x58671730.
+//
+// Solidity: function taskCounter() view returns(uint256)
+func (_HelloWorldL1 *HelloWorldL1Caller) TaskCounter(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _HelloWorldL1.contract.Call(opts, &out, "taskCounter")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// TaskCounter is a free data retrieval call binding the contract method 0x58671730.
+//
+// Solidity: function taskCounter() view returns(uint256)
+func (_HelloWorldL1 *HelloWorldL1Session) TaskCounter() (*big.Int, error) {
+	return _HelloWorldL1.Contract.TaskCounter(&_HelloWorldL1.CallOpts)
+}
+
+// TaskCounter is a free data retrieval call binding the contract method 0x58671730.
+//
+// Solidity: function taskCounter() view returns(uint256)
+func (_HelloWorldL1 *HelloWorldL1CallerSession) TaskCounter() (*big.Int, error) {
+	return _HelloWorldL1.Contract.TaskCounter(&_HelloWorldL1.CallOpts)
+}
+
+// Tasks is a free data retrieval call binding the contract method 0x8d977672.
+//
+// Solidity: function tasks(uint256 ) view returns(uint256 a, uint256 b, uint256 claimedResult, address requester, bool verified, bool isCorrect, uint256 timestamp)
+func (_HelloWorldL1 *HelloWorldL1Caller) Tasks(opts *bind.CallOpts, arg0 *big.Int) (struct {
+	A             *big.Int
+	B             *big.Int
+	ClaimedResult *big.Int
+	Requester     common.Address
+	Verified      bool
+	IsCorrect     bool
+	Timestamp     *big.Int
+}, error) {
+	var out []interface{}
+	err := _HelloWorldL1.contract.Call(opts, &out, "tasks", arg0)
+
+	outstruct := new(struct {
+		A             *big.Int
+		B             *big.Int
+		ClaimedResult *big.Int
+		Requester     common.Address
+		Verified      bool
+		IsCorrect     bool
+		Timestamp     *big.Int
+	})
+	if err != nil {
+		return *outstruct, err
+	}
+
+	outstruct.A = *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+	outstruct.B = *abi.ConvertType(out[1], new(*big.Int)).(**big.Int)
+	outstruct.ClaimedResult = *abi.ConvertType(out[2], new(*big.Int)).(**big.Int)
+	outstruct.Requester = *abi.ConvertType(out[3], new(common.Address)).(*common.Address)
+	outstruct.Verified = *abi.ConvertType(out[4], new(bool)).(*bool)
+	outstruct.IsCorrect = *abi.ConvertType(out[5], new(bool)).(*bool)
+	outstruct.Timestamp = *abi.ConvertType(out[6], new(*big.Int)).(**big.Int)
+
+	return *outstruct, err
+
+}
+
+// Tasks is a free data retrieval call binding the contract method 0x8d977672.
+//
+// Solidity: function tasks(uint256 ) view returns(uint256 a, uint256 b, uint256 claimedResult, address requester, bool verified, bool isCorrect, uint256 timestamp)
+func (_HelloWorldL1 *HelloWorldL1Session) Tasks(arg0 *big.Int) (struct {
+	A             *big.Int
+	B             *big.Int
+	ClaimedResult *big.Int
+	Requester     common.Address
+	Verified      bool
+	IsCorrect     bool
+	Timestamp     *big.Int
+}, error) {
+	return _HelloWorldL1.Contract.Tasks(&_HelloWorldL1.CallOpts, arg0)
+}
+
+// Tasks is a free data retrieval call binding the contract method 0x8d977672.
+//
+// Solidity: function tasks(uint256 ) view returns(uint256 a, uint256 b, uint256 claimedResult, address requester, bool verified, bool isCorrect, uint256 timestamp)
+func (_HelloWorldL1 *HelloWorldL1CallerSession) Tasks(arg0 *big.Int) (struct {
+	A             *big.Int
+	B             *big.Int
+	ClaimedResult *big.Int
+	Requester     common.Address
+	Verified      bool
+	IsCorrect     bool
+	Timestamp     *big.Int
+}, error) {
+	return _HelloWorldL1.Contract.Tasks(&_HelloWorldL1.CallOpts, arg0)
+}
+
+// VerifySumOnChain is a free data retrieval call binding the contract method 0x6ef6a577.
+//
+// Solidity: function verifySumOnChain(uint256 a, uint256 b, uint256 result) pure returns(bool)
+func (_HelloWorldL1 *HelloWorldL1Caller) VerifySumOnChain(opts *bind.CallOpts, a *big.Int, b *big.Int, result *big.Int) (bool, error) {
+	var out []interface{}
+	err := _HelloWorldL1.contract.Call(opts, &out, "verifySumOnChain", a, b, result)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// VerifySumOnChain is a free data retrieval call binding the contract method 0x6ef6a577.
+//
+// Solidity: function verifySumOnChain(uint256 a, uint256 b, uint256 result) pure returns(bool)
+func (_HelloWorldL1 *HelloWorldL1Session) VerifySumOnChain(a *big.Int, b *big.Int, result *big.Int) (bool, error) {
+	return _HelloWorldL1.Contract.VerifySumOnChain(&_HelloWorldL1.CallOpts, a, b, result)
+}
+
+// VerifySumOnChain is a free data retrieval call binding the contract method 0x6ef6a577.
+//
+// Solidity: function verifySumOnChain(uint256 a, uint256 b, uint256 result) pure returns(bool)
+func (_HelloWorldL1 *HelloWorldL1CallerSession) VerifySumOnChain(a *big.Int, b *big.Int, result *big.Int) (bool, error) {
+	return _HelloWorldL1.Contract.VerifySumOnChain(&_HelloWorldL1.CallOpts, a, b, result)
+}
+
+// CompleteSumVerification is a paid mutator transaction binding the contract method 0xd8fb6f84.
+//
+// Solidity: function completeSumVerification(uint256 taskId, bool isCorrect) returns()
+func (_HelloWorldL1 *HelloWorldL1Transactor) CompleteSumVerification(opts *bind.TransactOpts, taskId *big.Int, isCorrect bool) (*types.Transaction, error) {
+	return _HelloWorldL1.contract.Transact(opts, "completeSumVerification", taskId, isCorrect)
+}
+
+// CompleteSumVerification is a paid mutator transaction binding the contract method 0xd8fb6f84.
+//
+// Solidity: function completeSumVerification(uint256 taskId, bool isCorrect) returns()
+func (_HelloWorldL1 *HelloWorldL1Session) CompleteSumVerification(taskId *big.Int, isCorrect bool) (*types.Transaction, error) {
+	return _HelloWorldL1.Contract.CompleteSumVerification(&_HelloWorldL1.TransactOpts, taskId, isCorrect)
+}
+
+// CompleteSumVerification is a paid mutator transaction binding the contract method 0xd8fb6f84.
+//
+// Solidity: function completeSumVerification(uint256 taskId, bool isCorrect) returns()
+func (_HelloWorldL1 *HelloWorldL1TransactorSession) CompleteSumVerification(taskId *big.Int, isCorrect bool) (*types.Transaction, error) {
+	return _HelloWorldL1.Contract.CompleteSumVerification(&_HelloWorldL1.TransactOpts, taskId, isCorrect)
+}
+
+// RequestSumVerification is a paid mutator transaction binding the contract method 0x2ee28d8a.
+//
+// Solidity: function requestSumVerification(uint256 a, uint256 b, uint256 claimedResult) returns(uint256 taskId)
+func (_HelloWorldL1 *HelloWorldL1Transactor) RequestSumVerification(opts *bind.TransactOpts, a *big.Int, b *big.Int, claimedResult *big.Int) (*types.Transaction, error) {
+	return _HelloWorldL1.contract.Transact(opts, "requestSumVerification", a, b, claimedResult)
+}
+
+// RequestSumVerification is a paid mutator transaction binding the contract method 0x2ee28d8a.
+//
+// Solidity: function requestSumVerification(uint256 a, uint256 b, uint256 claimedResult) returns(uint256 taskId)
+func (_HelloWorldL1 *HelloWorldL1Session) RequestSumVerification(a *big.Int, b *big.Int, claimedResult *big.Int) (*types.Transaction, error) {
+	return _HelloWorldL1.Contract.RequestSumVerification(&_HelloWorldL1.TransactOpts, a, b, claimedResult)
+}
+
+// RequestSumVerification is a paid mutator transaction binding the contract method 0x2ee28d8a.
+//
+// Solidity: function requestSumVerification(uint256 a, uint256 b, uint256 claimedResult) returns(uint256 taskId)
+func (_HelloWorldL1 *HelloWorldL1TransactorSession) RequestSumVerification(a *big.Int, b *big.Int, claimedResult *big.Int) (*types.Transaction, error) {
+	return _HelloWorldL1.Contract.RequestSumVerification(&_HelloWorldL1.TransactOpts, a, b, claimedResult)
+}
+
+// HelloWorldL1SumVerificationCompletedIterator is returned from FilterSumVerificationCompleted and is used to iterate over the raw logs and unpacked data for SumVerificationCompleted events raised by the HelloWorldL1 contract.
+type HelloWorldL1SumVerificationCompletedIterator struct {
+	Event *HelloWorldL1SumVerificationCompleted // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *HelloWorldL1SumVerificationCompletedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(HelloWorldL1SumVerificationCompleted)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(HelloWorldL1SumVerificationCompleted)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *HelloWorldL1SumVerificationCompletedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *HelloWorldL1SumVerificationCompletedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// HelloWorldL1SumVerificationCompleted represents a SumVerificationCompleted event raised by the HelloWorldL1 contract.
+type HelloWorldL1SumVerificationCompleted struct {
+	TaskId       *big.Int
+	IsCorrect    bool
+	ActualResult *big.Int
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterSumVerificationCompleted is a free log retrieval operation binding the contract event 0xac2034b96316771cf452968ad23adf2a71e4c283d311ad2b66de9b6f7f91a7dd.
+//
+// Solidity: event SumVerificationCompleted(uint256 indexed taskId, bool isCorrect, uint256 actualResult)
+func (_HelloWorldL1 *HelloWorldL1Filterer) FilterSumVerificationCompleted(opts *bind.FilterOpts, taskId []*big.Int) (*HelloWorldL1SumVerificationCompletedIterator, error) {
+
+	var taskIdRule []interface{}
+	for _, taskIdItem := range taskId {
+		taskIdRule = append(taskIdRule, taskIdItem)
+	}
+
+	logs, sub, err := _HelloWorldL1.contract.FilterLogs(opts, "SumVerificationCompleted", taskIdRule)
+	if err != nil {
+		return nil, err
+	}
+	return &HelloWorldL1SumVerificationCompletedIterator{contract: _HelloWorldL1.contract, event: "SumVerificationCompleted", logs: logs, sub: sub}, nil
+}
+
+// WatchSumVerificationCompleted is a free log subscription operation binding the contract event 0xac2034b96316771cf452968ad23adf2a71e4c283d311ad2b66de9b6f7f91a7dd.
+//
+// Solidity: event SumVerificationCompleted(uint256 indexed taskId, bool isCorrect, uint256 actualResult)
+func (_HelloWorldL1 *HelloWorldL1Filterer) WatchSumVerificationCompleted(opts *bind.WatchOpts, sink chan<- *HelloWorldL1SumVerificationCompleted, taskId []*big.Int) (event.Subscription, error) {
+
+	var taskIdRule []interface{}
+	for _, taskIdItem := range taskId {
+		taskIdRule = append(taskIdRule, taskIdItem)
+	}
+
+	logs, sub, err := _HelloWorldL1.contract.WatchLogs(opts, "SumVerificationCompleted", taskIdRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(HelloWorldL1SumVerificationCompleted)
+				if err := _HelloWorldL1.contract.UnpackLog(event, "SumVerificationCompleted", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseSumVerificationCompleted is a log parse operation binding the contract event 0xac2034b96316771cf452968ad23adf2a71e4c283d311ad2b66de9b6f7f91a7dd.
+//
+// Solidity: event SumVerificationCompleted(uint256 indexed taskId, bool isCorrect, uint256 actualResult)
+func (_HelloWorldL1 *HelloWorldL1Filterer) ParseSumVerificationCompleted(log types.Log) (*HelloWorldL1SumVerificationCompleted, error) {
+	event := new(HelloWorldL1SumVerificationCompleted)
+	if err := _HelloWorldL1.contract.UnpackLog(event, "SumVerificationCompleted", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// HelloWorldL1SumVerificationRequestedIterator is returned from FilterSumVerificationRequested and is used to iterate over the raw logs and unpacked data for SumVerificationRequested events raised by the HelloWorldL1 contract.
+type HelloWorldL1SumVerificationRequestedIterator struct {
+	Event *HelloWorldL1SumVerificationRequested // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *HelloWorldL1SumVerificationRequestedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(HelloWorldL1SumVerificationRequested)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(HelloWorldL1SumVerificationRequested)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *HelloWorldL1SumVerificationRequestedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *HelloWorldL1SumVerificationRequestedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// HelloWorldL1SumVerificationRequested represents a SumVerificationRequested event raised by the HelloWorldL1 contract.
+type HelloWorldL1SumVerificationRequested struct {
+	TaskId        *big.Int
+	Requester     common.Address
+	A             *big.Int
+	B             *big.Int
+	ClaimedResult *big.Int
+	Raw           types.Log // Blockchain specific contextual infos
+}
+
+// FilterSumVerificationRequested is a free log retrieval operation binding the contract event 0x74396ec72e1af7caf32d3950fc17c8d8e32f4efe70ee2ec3c327f4091dab1347.
+//
+// Solidity: event SumVerificationRequested(uint256 indexed taskId, address indexed requester, uint256 a, uint256 b, uint256 claimedResult)
+func (_HelloWorldL1 *HelloWorldL1Filterer) FilterSumVerificationRequested(opts *bind.FilterOpts, taskId []*big.Int, requester []common.Address) (*HelloWorldL1SumVerificationRequestedIterator, error) {
+
+	var taskIdRule []interface{}
+	for _, taskIdItem := range taskId {
+		taskIdRule = append(taskIdRule, taskIdItem)
+	}
+	var requesterRule []interface{}
+	for _, requesterItem := range requester {
+		requesterRule = append(requesterRule, requesterItem)
+	}
+
+	logs, sub, err := _HelloWorldL1.contract.FilterLogs(opts, "SumVerificationRequested", taskIdRule, requesterRule)
+	if err != nil {
+		return nil, err
+	}
+	return &HelloWorldL1SumVerificationRequestedIterator{contract: _HelloWorldL1.contract, event: "SumVerificationRequested", logs: logs, sub: sub}, nil
+}
+
+// WatchSumVerificationRequested is a free log subscription operation binding the contract event 0x74396ec72e1af7caf32d3950fc17c8d8e32f4efe70ee2ec3c327f4091dab1347.
+//
+// Solidity: event SumVerificationRequested(uint256 indexed taskId, address indexed requester, uint256 a, uint256 b, uint256 claimedResult)
+func (_HelloWorldL1 *HelloWorldL1Filterer) WatchSumVerificationRequested(opts *bind.WatchOpts, sink chan<- *HelloWorldL1SumVerificationRequested, taskId []*big.Int, requester []common.Address) (event.Subscription, error) {
+
+	var taskIdRule []interface{}
+	for _, taskIdItem := range taskId {
+		taskIdRule = append(taskIdRule, taskIdItem)
+	}
+	var requesterRule []interface{}
+	for _, requesterItem := range requester {
+		requesterRule = append(requesterRule, requesterItem)
+	}
+
+	logs, sub, err := _HelloWorldL1.contract.WatchLogs(opts, "SumVerificationRequested", taskIdRule, requesterRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(HelloWorldL1SumVerificationRequested)
+				if err := _HelloWorldL1.contract.UnpackLog(event, "SumVerificationRequested", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseSumVerificationRequested is a log parse operation binding the contract event 0x74396ec72e1af7caf32d3950fc17c8d8e32f4efe70ee2ec3c327f4091dab1347.
+//
+// Solidity: event SumVerificationRequested(uint256 indexed taskId, address indexed requester, uint256 a, uint256 b, uint256 claimedResult)
+func (_HelloWorldL1 *HelloWorldL1Filterer) ParseSumVerificationRequested(log types.Log) (*HelloWorldL1SumVerificationRequested, error) {
+	event := new(HelloWorldL1SumVerificationRequested)
+	if err := _HelloWorldL1.contract.UnpackLog(event, "SumVerificationRequested", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
 }

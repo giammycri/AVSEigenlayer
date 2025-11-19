@@ -1,0 +1,41 @@
+{
+  "name": "avsTaskHook",
+  "address": "0x56186c1e64ca8043DEF78d06Aff222212ea5df71",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "hookTask",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "TaskHooked",
+      "type": "event"
+    }
+  ],
+  "chainInfo": {
+    "chainId": 31338
+  }
+}

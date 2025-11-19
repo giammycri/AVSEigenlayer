@@ -9,8 +9,7 @@ import {ITransparentUpgradeableProxy} from "@openzeppelin/contracts/proxy/transp
 import {IAllocationManager} from "@eigenlayer-contracts/src/contracts/interfaces/IAllocationManager.sol";
 import {IKeyRegistrar} from "@eigenlayer-contracts/src/contracts/interfaces/IKeyRegistrar.sol";
 import {IPermissionController} from "@eigenlayer-contracts/src/contracts/interfaces/IPermissionController.sol";
-import {ITaskAVSRegistrarBaseTypes} from "@eigenlayer-middleware/src/interfaces/ITaskAVSRegistrarBase.sol";
-import {OperatorSet} from "@eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
+import {IAVSRegistrar} from "@eigenlayer-contracts/src/contracts/interfaces/IAVSRegistrar.sol";
 
 import {TaskAVSRegistrar} from "@project/l1-contracts/TaskAVSRegistrar.sol";
 
@@ -32,14 +31,6 @@ contract DeployAVSL1Contracts is Script {
         vm.startBroadcast(deployerPrivateKey);
         console.log("Deployer address:", vm.addr(deployerPrivateKey));
 
-        // Create initial config
-        uint32[] memory executorOperatorSetIds = new uint32[](1);
-        executorOperatorSetIds[0] = executorOperatorSetId;
-        ITaskAVSRegistrarBaseTypes.AvsConfig memory initialConfig = ITaskAVSRegistrarBaseTypes.AvsConfig({
-            aggregatorOperatorSetId: aggregatorOperatorSetId,
-            executorOperatorSetIds: executorOperatorSetIds
-        });
-
         // Deploy ProxyAdmin
         ProxyAdmin proxyAdmin = new ProxyAdmin();
         console.log("ProxyAdmin deployed to:", address(proxyAdmin));
@@ -57,25 +48,38 @@ contract DeployAVSL1Contracts is Script {
             address(taskAVSRegistrarImpl),
             address(proxyAdmin),
             abi.encodeWithSelector(
-                TaskAVSRegistrar.initialize.selector, avs, vm.addr(deployerPrivateKey), initialConfig
+                TaskAVSRegistrar.initialize.selector, 
+                avs, 
+                vm.addr(deployerPrivateKey)
             )
         );
         console.log("TaskAVSRegistrar proxy deployed to:", address(proxy));
 
-        // Whitelist operators BEFORE transferring ownership
-        OperatorSet memory aggregatorOperatorSet = OperatorSet({avs: avs, id: aggregatorOperatorSetId});
+        // Add operators to allowlist
         for (uint256 i = 0; i < aggregatorWhitelistedOperators.length; i++) {
             TaskAVSRegistrar(address(proxy)).addOperatorToAllowlist(
-                aggregatorOperatorSet, aggregatorWhitelistedOperators[i]
+                aggregatorWhitelistedOperators[i]
             );
+            console.log("Added operator to allowlist:", aggregatorWhitelistedOperators[i]);
         }
 
-        // Transfer ownership of the proxy to the avs
-        TaskAVSRegistrar(address(proxy)).transferOwnership(avs);
+        console.log("WARNING: TaskAVSRegistrar ownership NOT transferred - still owned by deployer");
+        console.log("Transfer ownership manually after AVS registration if needed");
 
         // Transfer ProxyAdmin ownership to avs (or a multisig in production)
         proxyAdmin.transferOwnership(avs);
+        console.log("Transferred ProxyAdmin ownership to:", avs);
 
+        vm.stopBroadcast();
+
+        // Register AVS with EigenLayer AllocationManager
+        // This must be called FROM the AVS address
+        console.log("Registering AVS with EigenLayer...");
+        vm.startBroadcast(vm.envUint("AVS_PRIVATE_KEY")); // Use AVS private key
+        
+        IAllocationManager(allocationManager).setAVSRegistrar(avs, IAVSRegistrar(address(proxy)));
+        console.log("Successfully registered AVS with EigenLayer");
+        
         vm.stopBroadcast();
 
         // Write deployment info to output file

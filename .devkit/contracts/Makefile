@@ -42,24 +42,24 @@ setup-avs-task-mailbox-config:
 # Deploy Custom L1 Contracts
 .PHONY: deploy-custom-contracts-l1
 deploy-custom-contracts-l1:
-	forge script $(shell pwd)/../../contracts/script/DeployMyL1Contracts.s.sol \
-		--lib-paths . \
-		--rpc-url $(RPC_URL) \
-		--broadcast \
-		--sig "run(string, string)" "$(ENVIRONMENT)" '$(CONTEXT)'\
-		--slow \
-		-vvvv
+	forge script ../../contracts/script/DeployMyL1Contracts.s.sol:DeployMyL1Contracts \
+        --lib-paths . \
+        --rpc-url $(RPC_URL) \
+        --broadcast \
+        --sig "run(string, string)" "$(CONTEXT)" '$(CONTEXT_JSON)' \
+        --slow \
+        -vvvv
 
 # Deploy Custom L2 Contracts
 .PHONY: deploy-custom-contracts-l2
 deploy-custom-contracts-l2:
-	forge script $(shell pwd)/../../contracts/script/DeployMyL2Contracts.s.sol \
-		--lib-paths . \
-		--rpc-url $(RPC_URL) \
-		--broadcast \
-		--sig "run(string, string)" "$(ENVIRONMENT)" '$(CONTEXT)'\
-		--slow \
-		-vvvv
+	forge script ../../contracts/script/DeployMyL2Contracts.s.sol:DeployMyL2Contracts \
+        --lib-paths . \
+        --rpc-url $(RPC_URL) \
+        --broadcast \
+        --sig "run(string, string)" "$(CONTEXT)" '$(CONTEXT_JSON)' \
+        --slow \
+        -vvvv
 
 # Create Task
 .PHONY: create-task

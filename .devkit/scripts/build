@@ -47,10 +47,16 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# if image name is not provided , return error
+# if image name is not provided, default to project directory name
 if [ -z "$IMAGE_NAME" ]; then
-  echo "Error: Image name is required in .devkit/scripts/build" >&2
-  exit 1
+  PROJECT_NAME=$(basename "$(pwd)")
+  if [ -n "$PROJECT_NAME" ]; then
+    IMAGE_NAME="$PROJECT_NAME"
+    log "No --image provided, defaulting to project directory name: $IMAGE_NAME"
+  else
+    echo "Error: Image name is required in .devkit/scripts/build" >&2
+    exit 1
+  fi
 fi
 
 # suffix the image name with -performer
