@@ -8,11 +8,9 @@
 {{- end }}
 {{- $taskMailboxL2 = (ds "ctx").context.eigenlayer.l2.task_mailbox }}
 
-{{- /* required vars */}}
 {{- $opSetID := (ds "ctx").executor.operatorSetId }}
 {{- $executor := index (ds "ctx").executor.operators 0 }}
 
-{{- /* resolve curve type */}}
 {{- $curve := "" }}
 {{- range $i, $os := (ds "ctx").operatorSets }}
   {{- if eq (printf "%v" $os.id) (printf "%v" $opSetID) }}
@@ -33,7 +31,7 @@
 {{- if eq $curve "" }}{{- fail (printf "curve_type not found for operatorSetId=%v" $opSetID) }}{{- end }}
 
 grpcPort: 9090
-performerNetworkName: "hourglass-local_hourglass-network"
+performerNetworkName: "hourglass-local_hourglass-network" 
 managementServerGrpcPort: 8081
 storage:
   type: "memory"
@@ -47,7 +45,6 @@ operator:
         {{- if eq (printf "%v" $ks.operatorSet) (printf "%v" $opSetID) }}
           {{- $found = true }}
   operatorPrivateKey:
-    # EOA used for tx signing
     privateKey: "{{ $op.ecdsa_key }}"
   signingKeys:
     {{- if eq $curve "ecdsa" }}
@@ -69,7 +66,8 @@ operator:
 
 l1Chain:
   chainId: "{{ (ds "ctx").context.chains.l1.chain_id }}"
-  rpcUrl: "{{ (ds "ctx").context.chains.l1.rpc_url }}"
+  #rpcUrl: "{{ (ds "ctx").context.chains.l1.rpc_url }}"
+  rpcUrl: "http://host.docker.internal:8545" 
 
 avsPerformers:
   - image:
@@ -80,15 +78,18 @@ avsPerformers:
     workerCount: 1
     signingCurve: "{{ $curve }}"
     avsRegistrarAddress: "{{ $avsRegistrar }}"
+    grpcPort: 8080
+    # AGGIUNGI QUESTA SEZIONE per configurare la rete del container
+    #networkMode: "host"
     envs:
-      # L1 and L2 RPC URLs
       - name: "L1_RPC_URL"
-        value: "{{ (ds "ctx").context.chains.l1.rpc_url }}"
+        #value: "{{ (ds "ctx").context.chains.l1.rpc_url }}"
+        value: "http://host.docker.internal:8545"
         type: plain
       - name: "L2_RPC_URL"
-        value: "{{ (ds "ctx").context.chains.l2.rpc_url }}"
+        #value: "{{ (ds "ctx").context.chains.l2.rpc_url }}"
+        value: "http://host.docker.internal:9545"
         type: plain
-      # L1 Contract addresses
       {{- range $i, $contract := (ds "ctx").context.deployed_l1_contracts }}
       {{- $name := $contract.name | regexp.Replace "([a-z0-9])([A-Z])" "${1}_${2}" }}
       {{- $name = $name | regexp.Replace "([A-Z]+)([A-Z][a-z])" "${1}_${2}" }}
@@ -96,7 +97,6 @@ avsPerformers:
         value: "{{ $contract.address }}"
         type: plain
       {{- end }}
-      # L2 Contract addresses
       {{- range $i, $contract := (ds "ctx").context.deployed_l2_contracts }}
       {{- $name := $contract.name | regexp.Replace "([a-z0-9])([A-Z])" "${1}_${2}" }}
       {{- $name = $name | regexp.Replace "([A-Z]+)([A-Z][a-z])" "${1}_${2}" }}

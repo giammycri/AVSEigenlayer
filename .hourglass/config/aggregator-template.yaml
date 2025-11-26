@@ -76,12 +76,14 @@ chains:
   - name: "ethereum"
     network: "sepolia"
     chainId: {{ (ds "ctx").context.chains.l1.chain_id }}
-    rpcUrl: "{{ (ds "ctx").context.chains.l1.rpc_url }}"
+    #rpcUrl: "{{ (ds "ctx").context.chains.l1.rpc_url }}"
+    rpcUrl: "http://host.docker.internal:8545"
     pollIntervalSeconds: 2
   - name: "base"
     network: "sepolia"
     chainId: {{ (ds "ctx").context.chains.l2.chain_id }}
-    rpcUrl: "{{ (ds "ctx").context.chains.l2.rpc_url }}"
+    #rpcUrl: "{{ (ds "ctx").context.chains.l2.rpc_url }}"
+    rpcUrl: "http://host.docker.internal:9545"
     pollIntervalSeconds: 2
 
 avss:

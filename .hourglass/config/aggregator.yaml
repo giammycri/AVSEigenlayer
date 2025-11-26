@@ -24,12 +24,14 @@ chains:
   - name: "ethereum"
     network: "sepolia"
     chainId: 31337
-    rpcUrl: "http://localhost:8545"
+    #rpcUrl: "http://localhost:8545"
+    rpcUrl: "http://host.docker.internal:8545"
     pollIntervalSeconds: 2
   - name: "base"
     network: "sepolia"
     chainId: 31338
-    rpcUrl: "http://localhost:9545"
+    #rpcUrl: "http://localhost:9545"
+    rpcUrl: "http://host.docker.internal:9545"
     pollIntervalSeconds: 2
 
 avss:

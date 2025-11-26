@@ -1,7 +1,7 @@
 ---
 
 grpcPort: 9090
-performerNetworkName: "hourglass-local_hourglass-network"
+performerNetworkName: "hourglass-local_hourglass-network" 
 managementServerGrpcPort: 8081
 storage:
   type: "memory"
@@ -9,7 +9,6 @@ storage:
 operator:
   address: "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
   operatorPrivateKey:
-    # EOA used for tx signing
     privateKey: "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a"
   signingKeys:
     ecdsa:
@@ -17,7 +16,8 @@ operator:
 
 l1Chain:
   chainId: "31337"
-  rpcUrl: "http://localhost:8545"
+  #rpcUrl: "http://localhost:8545"
+  rpcUrl: "http://host.docker.internal:8545" 
 
 avsPerformers:
   - image:
@@ -28,15 +28,18 @@ avsPerformers:
     workerCount: 1
     signingCurve: "ecdsa"
     avsRegistrarAddress: "0x3EC7D050c71BaA842335c95DcD540f12543cA867"
+    grpcPort: 8080
+    # AGGIUNGI QUESTA SEZIONE per configurare la rete del container
+    #networkMode: "host"
     envs:
-      # L1 and L2 RPC URLs
       - name: "L1_RPC_URL"
-        value: "http://localhost:8545"
+        #value: "http://localhost:8545"
+        value: "http://host.docker.internal:8545"
         type: plain
       - name: "L2_RPC_URL"
-        value: "http://localhost:9545"
+        #value: "http://localhost:9545"
+        value: "http://host.docker.internal:9545"
         type: plain
-      # L1 Contract addresses
       - name: "L1_PROXY_ADMIN"
         value: "0x152Fc95cdC8FbE85998a3B5985F097a3093100DE"
         type: plain
@@ -49,7 +52,6 @@ avsPerformers:
       - name: "HELLO_WORLD_L1"
         value: "0xDe75C661C44Ee4456cD63197C8C53Cd5abE20493"
         type: plain
-      # L2 Contract addresses
       - name: "AVS_TASK_HOOK"
         value: "0x56186c1e64ca8043DEF78d06Aff222212ea5df71"
         type: plain

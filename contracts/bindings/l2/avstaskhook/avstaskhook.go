@@ -29,10 +29,23 @@ var (
 	_ = abi.ConvertType
 )
 
+// OperatorSet is an auto generated low-level Go binding around an user-defined struct.
+type OperatorSet struct {
+	Avs common.Address
+	Id  uint32
+}
+
+// TaskParams is an auto generated low-level Go binding around an user-defined struct.
+type TaskParams struct {
+	RefundCollector     common.Address
+	ExecutorOperatorSet OperatorSet
+	Payload             []byte
+}
+
 // AVSTaskHookMetaData contains all meta data concerning the AVSTaskHook contract.
 var AVSTaskHookMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"hookTask\",\"inputs\":[{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"TaskHooked\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"data\",\"type\":\"bytes\",\"indexed\":false,\"internalType\":\"bytes\"}],\"anonymous\":false}]",
-	Bin: "0x6080604052348015600e575f5ffd5b5061015b8061001c5f395ff3fe608060405234801561000f575f5ffd5b5060043610610029575f3560e01c806327f5cab41461002d575b5f5ffd5b61004061003b366004610089565b610042565b005b336001600160a01b03167fb0738a695d9bb0308414924b57a7b842be09926f59a0ab342c7ca67d210fefdb838360405161007d9291906100f7565b60405180910390a25050565b5f5f6020838503121561009a575f5ffd5b823567ffffffffffffffff8111156100b0575f5ffd5b8301601f810185136100c0575f5ffd5b803567ffffffffffffffff8111156100d6575f5ffd5b8560208284010111156100e7575f5ffd5b6020919091019590945092505050565b60208152816020820152818360408301375f818301604090810191909152601f909201601f1916010191905056fea26469706673582212206e082b0ce6acb5f12d08832d0f48fb788400f5dde2fc077000c826cc2d2f4f7364736f6c634300081b0033",
+	ABI: "[{\"type\":\"function\",\"name\":\"calculateTaskFee\",\"inputs\":[{\"name\":\"taskParams\",\"type\":\"tuple\",\"internalType\":\"structTaskParams\",\"components\":[{\"name\":\"refundCollector\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"executorOperatorSet\",\"type\":\"tuple\",\"internalType\":\"structOperatorSet\",\"components\":[{\"name\":\"avs\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"id\",\"type\":\"uint32\",\"internalType\":\"uint32\"}]},{\"name\":\"payload\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]}],\"outputs\":[{\"name\":\"fee\",\"type\":\"uint96\",\"internalType\":\"uint96\"}],\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"handlePostTaskCreation\",\"inputs\":[{\"name\":\"taskHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"validatePostTaskExecution\",\"inputs\":[{\"name\":\"taskHash\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"result\",\"type\":\"bytes\",\"internalType\":\"bytes\"}],\"outputs\":[],\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"validatePreTaskCreation\",\"inputs\":[{\"name\":\"creator\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"taskParams\",\"type\":\"tuple\",\"internalType\":\"structTaskParams\",\"components\":[{\"name\":\"refundCollector\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"executorOperatorSet\",\"type\":\"tuple\",\"internalType\":\"structOperatorSet\",\"components\":[{\"name\":\"avs\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"id\",\"type\":\"uint32\",\"internalType\":\"uint32\"}]},{\"name\":\"payload\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]}],\"outputs\":[],\"stateMutability\":\"pure\"}]",
+	Bin: "0x6080604052348015600e575f5ffd5b506102268061001c5f395ff3fe608060405234801561000f575f5ffd5b506004361061004a575f3560e01c806309c5c4501461004e57806351fe3098146100615780636adf155c14610073578063e06cd27e14610086575b5f5ffd5b61005f61005c3660046100ba565b50565b005b61005f61006f3660046100e7565b5050565b61005f61008136600461013f565b505050565b6100996100943660046101b6565b505f90565b6040516bffffffffffffffffffffffff909116815260200160405180910390f35b5f602082840312156100ca575f5ffd5b5035919050565b5f608082840312156100e1575f5ffd5b50919050565b5f5f604083850312156100f8575f5ffd5b82356001600160a01b038116811461010e575f5ffd5b9150602083013567ffffffffffffffff811115610129575f5ffd5b610135858286016100d1565b9150509250929050565b5f5f5f60408486031215610151575f5ffd5b83359250602084013567ffffffffffffffff81111561016e575f5ffd5b8401601f8101861361017e575f5ffd5b803567ffffffffffffffff811115610194575f5ffd5b8660208284010111156101a5575f5ffd5b939660209190910195509293505050565b5f602082840312156101c6575f5ffd5b813567ffffffffffffffff8111156101dc575f5ffd5b6101e8848285016100d1565b94935050505056fea2646970667358221220f3ce275523578690069fa9cb082ecd66748bf1156a24c36f8db6bfcc2bbd05cd64736f6c634300081b0033",
 }
 
 // AVSTaskHookABI is the input ABI used to generate the binding from.
@@ -202,168 +215,112 @@ func (_AVSTaskHook *AVSTaskHookTransactorRaw) Transact(opts *bind.TransactOpts, 
 	return _AVSTaskHook.Contract.contract.Transact(opts, method, params...)
 }
 
-// HookTask is a paid mutator transaction binding the contract method 0x27f5cab4.
+// CalculateTaskFee is a free data retrieval call binding the contract method 0xe06cd27e.
 //
-// Solidity: function hookTask(bytes data) returns()
-func (_AVSTaskHook *AVSTaskHookTransactor) HookTask(opts *bind.TransactOpts, data []byte) (*types.Transaction, error) {
-	return _AVSTaskHook.contract.Transact(opts, "hookTask", data)
-}
+// Solidity: function calculateTaskFee((address,(address,uint32),bytes) taskParams) pure returns(uint96 fee)
+func (_AVSTaskHook *AVSTaskHookCaller) CalculateTaskFee(opts *bind.CallOpts, taskParams TaskParams) (*big.Int, error) {
+	var out []interface{}
+	err := _AVSTaskHook.contract.Call(opts, &out, "calculateTaskFee", taskParams)
 
-// HookTask is a paid mutator transaction binding the contract method 0x27f5cab4.
-//
-// Solidity: function hookTask(bytes data) returns()
-func (_AVSTaskHook *AVSTaskHookSession) HookTask(data []byte) (*types.Transaction, error) {
-	return _AVSTaskHook.Contract.HookTask(&_AVSTaskHook.TransactOpts, data)
-}
-
-// HookTask is a paid mutator transaction binding the contract method 0x27f5cab4.
-//
-// Solidity: function hookTask(bytes data) returns()
-func (_AVSTaskHook *AVSTaskHookTransactorSession) HookTask(data []byte) (*types.Transaction, error) {
-	return _AVSTaskHook.Contract.HookTask(&_AVSTaskHook.TransactOpts, data)
-}
-
-// AVSTaskHookTaskHookedIterator is returned from FilterTaskHooked and is used to iterate over the raw logs and unpacked data for TaskHooked events raised by the AVSTaskHook contract.
-type AVSTaskHookTaskHookedIterator struct {
-	Event *AVSTaskHookTaskHooked // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AVSTaskHookTaskHookedIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AVSTaskHookTaskHooked)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AVSTaskHookTaskHooked)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AVSTaskHookTaskHookedIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AVSTaskHookTaskHookedIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AVSTaskHookTaskHooked represents a TaskHooked event raised by the AVSTaskHook contract.
-type AVSTaskHookTaskHooked struct {
-	Sender common.Address
-	Data   []byte
-	Raw    types.Log // Blockchain specific contextual infos
-}
-
-// FilterTaskHooked is a free log retrieval operation binding the contract event 0xb0738a695d9bb0308414924b57a7b842be09926f59a0ab342c7ca67d210fefdb.
-//
-// Solidity: event TaskHooked(address indexed sender, bytes data)
-func (_AVSTaskHook *AVSTaskHookFilterer) FilterTaskHooked(opts *bind.FilterOpts, sender []common.Address) (*AVSTaskHookTaskHookedIterator, error) {
-
-	var senderRule []interface{}
-	for _, senderItem := range sender {
-		senderRule = append(senderRule, senderItem)
-	}
-
-	logs, sub, err := _AVSTaskHook.contract.FilterLogs(opts, "TaskHooked", senderRule)
 	if err != nil {
-		return nil, err
+		return *new(*big.Int), err
 	}
-	return &AVSTaskHookTaskHookedIterator{contract: _AVSTaskHook.contract, event: "TaskHooked", logs: logs, sub: sub}, nil
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
-// WatchTaskHooked is a free log subscription operation binding the contract event 0xb0738a695d9bb0308414924b57a7b842be09926f59a0ab342c7ca67d210fefdb.
+// CalculateTaskFee is a free data retrieval call binding the contract method 0xe06cd27e.
 //
-// Solidity: event TaskHooked(address indexed sender, bytes data)
-func (_AVSTaskHook *AVSTaskHookFilterer) WatchTaskHooked(opts *bind.WatchOpts, sink chan<- *AVSTaskHookTaskHooked, sender []common.Address) (event.Subscription, error) {
+// Solidity: function calculateTaskFee((address,(address,uint32),bytes) taskParams) pure returns(uint96 fee)
+func (_AVSTaskHook *AVSTaskHookSession) CalculateTaskFee(taskParams TaskParams) (*big.Int, error) {
+	return _AVSTaskHook.Contract.CalculateTaskFee(&_AVSTaskHook.CallOpts, taskParams)
+}
 
-	var senderRule []interface{}
-	for _, senderItem := range sender {
-		senderRule = append(senderRule, senderItem)
-	}
+// CalculateTaskFee is a free data retrieval call binding the contract method 0xe06cd27e.
+//
+// Solidity: function calculateTaskFee((address,(address,uint32),bytes) taskParams) pure returns(uint96 fee)
+func (_AVSTaskHook *AVSTaskHookCallerSession) CalculateTaskFee(taskParams TaskParams) (*big.Int, error) {
+	return _AVSTaskHook.Contract.CalculateTaskFee(&_AVSTaskHook.CallOpts, taskParams)
+}
 
-	logs, sub, err := _AVSTaskHook.contract.WatchLogs(opts, "TaskHooked", senderRule)
+// ValidatePostTaskExecution is a free data retrieval call binding the contract method 0x6adf155c.
+//
+// Solidity: function validatePostTaskExecution(bytes32 taskHash, bytes result) pure returns()
+func (_AVSTaskHook *AVSTaskHookCaller) ValidatePostTaskExecution(opts *bind.CallOpts, taskHash [32]byte, result []byte) error {
+	var out []interface{}
+	err := _AVSTaskHook.contract.Call(opts, &out, "validatePostTaskExecution", taskHash, result)
+
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AVSTaskHookTaskHooked)
-				if err := _AVSTaskHook.contract.UnpackLog(event, "TaskHooked", log); err != nil {
-					return err
-				}
-				event.Raw = log
 
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	return err
+
 }
 
-// ParseTaskHooked is a log parse operation binding the contract event 0xb0738a695d9bb0308414924b57a7b842be09926f59a0ab342c7ca67d210fefdb.
+// ValidatePostTaskExecution is a free data retrieval call binding the contract method 0x6adf155c.
 //
-// Solidity: event TaskHooked(address indexed sender, bytes data)
-func (_AVSTaskHook *AVSTaskHookFilterer) ParseTaskHooked(log types.Log) (*AVSTaskHookTaskHooked, error) {
-	event := new(AVSTaskHookTaskHooked)
-	if err := _AVSTaskHook.contract.UnpackLog(event, "TaskHooked", log); err != nil {
-		return nil, err
+// Solidity: function validatePostTaskExecution(bytes32 taskHash, bytes result) pure returns()
+func (_AVSTaskHook *AVSTaskHookSession) ValidatePostTaskExecution(taskHash [32]byte, result []byte) error {
+	return _AVSTaskHook.Contract.ValidatePostTaskExecution(&_AVSTaskHook.CallOpts, taskHash, result)
+}
+
+// ValidatePostTaskExecution is a free data retrieval call binding the contract method 0x6adf155c.
+//
+// Solidity: function validatePostTaskExecution(bytes32 taskHash, bytes result) pure returns()
+func (_AVSTaskHook *AVSTaskHookCallerSession) ValidatePostTaskExecution(taskHash [32]byte, result []byte) error {
+	return _AVSTaskHook.Contract.ValidatePostTaskExecution(&_AVSTaskHook.CallOpts, taskHash, result)
+}
+
+// ValidatePreTaskCreation is a free data retrieval call binding the contract method 0x51fe3098.
+//
+// Solidity: function validatePreTaskCreation(address creator, (address,(address,uint32),bytes) taskParams) pure returns()
+func (_AVSTaskHook *AVSTaskHookCaller) ValidatePreTaskCreation(opts *bind.CallOpts, creator common.Address, taskParams TaskParams) error {
+	var out []interface{}
+	err := _AVSTaskHook.contract.Call(opts, &out, "validatePreTaskCreation", creator, taskParams)
+
+	if err != nil {
+		return err
 	}
-	event.Raw = log
-	return event, nil
+
+	return err
+
+}
+
+// ValidatePreTaskCreation is a free data retrieval call binding the contract method 0x51fe3098.
+//
+// Solidity: function validatePreTaskCreation(address creator, (address,(address,uint32),bytes) taskParams) pure returns()
+func (_AVSTaskHook *AVSTaskHookSession) ValidatePreTaskCreation(creator common.Address, taskParams TaskParams) error {
+	return _AVSTaskHook.Contract.ValidatePreTaskCreation(&_AVSTaskHook.CallOpts, creator, taskParams)
+}
+
+// ValidatePreTaskCreation is a free data retrieval call binding the contract method 0x51fe3098.
+//
+// Solidity: function validatePreTaskCreation(address creator, (address,(address,uint32),bytes) taskParams) pure returns()
+func (_AVSTaskHook *AVSTaskHookCallerSession) ValidatePreTaskCreation(creator common.Address, taskParams TaskParams) error {
+	return _AVSTaskHook.Contract.ValidatePreTaskCreation(&_AVSTaskHook.CallOpts, creator, taskParams)
+}
+
+// HandlePostTaskCreation is a paid mutator transaction binding the contract method 0x09c5c450.
+//
+// Solidity: function handlePostTaskCreation(bytes32 taskHash) returns()
+func (_AVSTaskHook *AVSTaskHookTransactor) HandlePostTaskCreation(opts *bind.TransactOpts, taskHash [32]byte) (*types.Transaction, error) {
+	return _AVSTaskHook.contract.Transact(opts, "handlePostTaskCreation", taskHash)
+}
+
+// HandlePostTaskCreation is a paid mutator transaction binding the contract method 0x09c5c450.
+//
+// Solidity: function handlePostTaskCreation(bytes32 taskHash) returns()
+func (_AVSTaskHook *AVSTaskHookSession) HandlePostTaskCreation(taskHash [32]byte) (*types.Transaction, error) {
+	return _AVSTaskHook.Contract.HandlePostTaskCreation(&_AVSTaskHook.TransactOpts, taskHash)
+}
+
+// HandlePostTaskCreation is a paid mutator transaction binding the contract method 0x09c5c450.
+//
+// Solidity: function handlePostTaskCreation(bytes32 taskHash) returns()
+func (_AVSTaskHook *AVSTaskHookTransactorSession) HandlePostTaskCreation(taskHash [32]byte) (*types.Transaction, error) {
+	return _AVSTaskHook.Contract.HandlePostTaskCreation(&_AVSTaskHook.TransactOpts, taskHash)
 }
