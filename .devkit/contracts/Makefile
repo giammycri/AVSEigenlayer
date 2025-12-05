@@ -15,7 +15,7 @@ deploy-avs-l1-contracts:
 	forge script script/deploy/DeployAVSL1Contracts.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string, address, address, address, address, uint32, uint32, address[])" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) $(KEY_REGISTRAR_ADDRESS) $(PERMISSION_CONTROLLER_ADDRESS) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) $(AGGREGATOR_OPERATORS) \
+		--sig "run(string, address, address, address, address, uint32, uint32, address[], address[])" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) $(KEY_REGISTRAR_ADDRESS) $(PERMISSION_CONTROLLER_ADDRESS) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) $(AGGREGATOR_OPERATORS) $(EXECUTOR_OPERATORS) \
 		--slow \
 		-vvvv
 
@@ -82,4 +82,4 @@ help:
 	@echo "  make setup-avs-task-mailbox-config TASK_MAILBOX_ADDRESS=0x... CERTIFICATE_VERIFIER_ADDRESS=0x... TASK_HOOK_ADDRESS=0x... - Setup AVS Task Mailbox Config"
 	@echo "  make create-task TASK_MAILBOX_ADDRESS=0x... AVS_ADDRESS=0x... VALUE=5 - Create Task"
 	@echo ""
-	@echo "Note: Make sure to set RPC_URL and PRIVATE_KEY in your environment or .env file" 
+	@echo "Note: Make sure to set RPC_URL and PRIVATE_KEY in your environment or .env file"

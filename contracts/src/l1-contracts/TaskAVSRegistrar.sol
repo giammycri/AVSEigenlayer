@@ -11,8 +11,23 @@ import {IAVSRegistrar} from "@eigenlayer-contracts/src/contracts/interfaces/IAVS
 /**
  * @title TaskAVSRegistrar
  * @notice Manages operator registration and allowlist for task-based AVS
+ * @dev Implements the ITaskAVSRegistrarBase interface expected by Hourglass
  */
 contract TaskAVSRegistrar is IAVSRegistrar, Initializable, OwnableUpgradeable {
+    
+    // ============ Structs ============
+    
+    /**
+     * @notice Configuration for the Task-based AVS
+     * @param aggregatorOperatorSetId The operator set ID responsible for aggregating results
+     * @param executorOperatorSetIds Array of operator set IDs responsible for executing tasks
+     */
+    struct AvsConfig {
+        uint32 aggregatorOperatorSetId;
+        uint32[] executorOperatorSetIds;
+    }
+    
+    // ============ State Variables ============
     
     // EigenLayer contract references
     IAllocationManager public immutable allocationManager;
@@ -22,16 +37,28 @@ contract TaskAVSRegistrar is IAVSRegistrar, Initializable, OwnableUpgradeable {
     // AVS configuration
     address public avsAddress;
     
+    // Operator Set configuration
+    uint32 public aggregatorOperatorSetId;
+    uint32[] public executorOperatorSetIds;
+    
     // Operator tracking
     mapping(address => bool) private _registeredOperators;
     mapping(address => bool) private _allowlistedOperators;
     address[] public registeredOperatorsList;
     
-    // Events
+    // ⭐ AGGIUNTO: Socket management
+    mapping(address => string) private _operatorSockets;
+    
+    // ============ Events ============
+    
     event OperatorRegistered(address indexed operator);
     event OperatorDeregistered(address indexed operator);
     event OperatorAllowlisted(address indexed operator, bool allowed);
     event AVSInitialized(address indexed avs, address indexed owner);
+    event AvsConfigSet(uint32 aggregatorOperatorSetId, uint32[] executorOperatorSetIds);
+    event OperatorSocketSet(address indexed operator, string socket);
+    
+    // ============ Constructor ============
     
     /**
      * @dev Constructor - sets immutable EigenLayer contract references
@@ -52,6 +79,8 @@ contract TaskAVSRegistrar is IAVSRegistrar, Initializable, OwnableUpgradeable {
         _disableInitializers();
     }
 
+    // ============ Initialization ============
+
     /**
      * @notice Initialize the AVS
      */
@@ -69,8 +98,53 @@ contract TaskAVSRegistrar is IAVSRegistrar, Initializable, OwnableUpgradeable {
         _transferOwnership(_owner);
         avsAddress = _avs;
         
+        // Set default operator set IDs based on Hourglass standard configuration
+        // Aggregator uses operator set 0, Executor uses operator set 1
+        aggregatorOperatorSetId = 0;
+        executorOperatorSetIds.push(1);
+        
         emit AVSInitialized(_avs, _owner);
+        emit AvsConfigSet(aggregatorOperatorSetId, executorOperatorSetIds);
     }
+
+    // ============ AVS Configuration Functions ============
+
+    /**
+     * @notice Set AVS operator set configuration
+     * @param config Configuration struct containing aggregator and executor operator set IDs
+     */
+    function setAvsConfig(AvsConfig memory config) 
+        external 
+        onlyOwner 
+    {
+        require(config.executorOperatorSetIds.length > 0, "Executor operator set IDs cannot be empty");
+        
+        aggregatorOperatorSetId = config.aggregatorOperatorSetId;
+        
+        // Clear existing array and copy new values
+        delete executorOperatorSetIds;
+        for (uint i = 0; i < config.executorOperatorSetIds.length; i++) {
+            executorOperatorSetIds.push(config.executorOperatorSetIds[i]);
+        }
+        
+        emit AvsConfigSet(config.aggregatorOperatorSetId, config.executorOperatorSetIds);
+    }
+
+    /**
+     * @notice Get AVS configuration
+     * @return config Configuration struct containing aggregator and executor operator set IDs
+     */
+    function getAvsConfig() 
+        external 
+        view 
+        returns (AvsConfig memory config) 
+    {
+        config.aggregatorOperatorSetId = aggregatorOperatorSetId;
+        config.executorOperatorSetIds = executorOperatorSetIds;
+        return config;
+    }
+
+    // ============ AVS Support ============
 
     /**
      * @notice Check if this registrar supports a specific AVS
@@ -80,6 +154,8 @@ contract TaskAVSRegistrar is IAVSRegistrar, Initializable, OwnableUpgradeable {
     function supportsAVS(address avs) external view returns (bool) {
         return avs == avsAddress;
     }
+
+    // ============ Allowlist Management ============
 
     /**
      * @notice Add operator to allowlist
@@ -106,8 +182,51 @@ contract TaskAVSRegistrar is IAVSRegistrar, Initializable, OwnableUpgradeable {
         emit OperatorAllowlisted(operator, allowed);
     }
 
+    // ============ Socket Management ============
+
+    /**
+     * ⭐ AGGIUNTO: Get operator socket (RICHIESTO DA HOURGLASS)
+     * @param operator The operator address
+     * @return socket The operator's network socket
+     */
+    function getOperatorSocket(address operator) 
+        external 
+        view 
+        returns (string memory) 
+    {
+        return _operatorSockets[operator];
+    }
+
+    /**
+     * ⭐ AGGIUNTO: Set operator socket
+     * @param operator The operator address
+     * @param socket The operator's network socket
+     */
+    function setOperatorSocket(address operator, string memory socket) 
+        external 
+        onlyOwner 
+    {
+        require(operator != address(0), "Invalid operator");
+        require(bytes(socket).length > 0, "Invalid socket");
+        _operatorSockets[operator] = socket;
+        emit OperatorSocketSet(operator, socket);
+    }
+
+    /**
+     * ⭐ AGGIUNTO: Internal function to set operator socket
+     * @param operator The operator address
+     * @param socket The operator's network socket
+     */
+    function _setOperatorSocket(address operator, string memory socket) internal {
+        _operatorSockets[operator] = socket;
+        emit OperatorSocketSet(operator, socket);
+    }
+
+    // ============ Operator Registration ============
+
     /**
      * @notice Register an operator - implements IAVSRegistrar interface
+     * ⭐ MODIFICATO: Ora decodifica il socket dal parametro operatorSignature
      */
     function registerOperator(
         address operator,
@@ -121,6 +240,13 @@ contract TaskAVSRegistrar is IAVSRegistrar, Initializable, OwnableUpgradeable {
         require(operator != address(0), "Invalid operator");
         require(!_registeredOperators[operator], "Already registered");
         require(_allowlistedOperators[operator], "Operator not allowlisted");
+        
+        // ⭐ AGGIUNTO: Decodifica il socket dal payload
+        // Il parametro operatorSignature contiene il socket encodato come string
+        if (operatorSignature.length > 0) {
+            string memory socket = abi.decode(operatorSignature, (string));
+            _setOperatorSocket(operator, socket);
+        }
         
         _registeredOperators[operator] = true;
         registeredOperatorsList.push(operator);
@@ -145,6 +271,8 @@ contract TaskAVSRegistrar is IAVSRegistrar, Initializable, OwnableUpgradeable {
         
         emit OperatorDeregistered(operator);
     }
+
+    // ============ View Functions ============
 
     /**
      * @notice Check if operator is registered

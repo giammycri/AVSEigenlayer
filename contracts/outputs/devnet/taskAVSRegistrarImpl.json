@@ -38,6 +38,19 @@
     },
     {
       "inputs": [],
+      "name": "aggregatorOperatorSetId",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "allocationManager",
       "outputs": [
         {
@@ -83,6 +96,69 @@
       "name": "deregisterOperator",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "executorOperatorSetIds",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAvsConfig",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "aggregatorOperatorSetId",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32[]",
+              "name": "executorOperatorSetIds",
+              "type": "uint32[]"
+            }
+          ],
+          "internalType": "struct TaskAVSRegistrar.AvsConfig",
+          "name": "config",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        }
+      ],
+      "name": "getOperatorSocket",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -263,6 +339,49 @@
     {
       "inputs": [
         {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "aggregatorOperatorSetId",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32[]",
+              "name": "executorOperatorSetIds",
+              "type": "uint32[]"
+            }
+          ],
+          "internalType": "struct TaskAVSRegistrar.AvsConfig",
+          "name": "config",
+          "type": "tuple"
+        }
+      ],
+      "name": "setAvsConfig",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "socket",
+          "type": "string"
+        }
+      ],
+      "name": "setOperatorSocket",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "avs",
           "type": "address"
@@ -309,6 +428,25 @@
         }
       ],
       "name": "AVSInitialized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "aggregatorOperatorSetId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32[]",
+          "name": "executorOperatorSetIds",
+          "type": "uint32[]"
+        }
+      ],
+      "name": "AvsConfigSet",
       "type": "event"
     },
     {
@@ -367,6 +505,25 @@
         }
       ],
       "name": "OperatorRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "socket",
+          "type": "string"
+        }
+      ],
+      "name": "OperatorSocketSet",
       "type": "event"
     },
     {

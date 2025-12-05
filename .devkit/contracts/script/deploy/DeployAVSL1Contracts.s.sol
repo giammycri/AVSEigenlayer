@@ -22,7 +22,8 @@ contract DeployAVSL1Contracts is Script {
         address permissionController,
         uint32 aggregatorOperatorSetId,
         uint32 executorOperatorSetId,
-        address[] memory aggregatorWhitelistedOperators
+        address[] memory aggregatorWhitelistedOperators,
+        address[] memory executorWhitelistedOperators
     ) public {
         // Load the private key from the environment variable
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
@@ -55,12 +56,22 @@ contract DeployAVSL1Contracts is Script {
         );
         console.log("TaskAVSRegistrar proxy deployed to:", address(proxy));
 
-        // Add operators to allowlist
+        // Add aggregator operators to allowlist
+        console.log("Adding aggregator operators to allowlist...");
         for (uint256 i = 0; i < aggregatorWhitelistedOperators.length; i++) {
             TaskAVSRegistrar(address(proxy)).addOperatorToAllowlist(
                 aggregatorWhitelistedOperators[i]
             );
-            console.log("Added operator to allowlist:", aggregatorWhitelistedOperators[i]);
+            console.log("Added aggregator operator to allowlist:", aggregatorWhitelistedOperators[i]);
+        }
+
+        // Add executor operators to allowlist
+        console.log("Adding executor operators to allowlist...");
+        for (uint256 i = 0; i < executorWhitelistedOperators.length; i++) {
+            TaskAVSRegistrar(address(proxy)).addOperatorToAllowlist(
+                executorWhitelistedOperators[i]
+            );
+            console.log("Added executor operator to allowlist:", executorWhitelistedOperators[i]);
         }
 
         console.log("WARNING: TaskAVSRegistrar ownership NOT transferred - still owned by deployer");
