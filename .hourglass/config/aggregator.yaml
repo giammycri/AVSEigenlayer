@@ -40,7 +40,7 @@ avss:
     chainIds:
       - 31338 # mailbox is only deployed to the L2
     signingCurve: "bn254"
-    avsRegistrarAddress: "0x3EC7D050c71BaA842335c95DcD540f12543cA867"
+    avsRegistrarAddress: "0x197baBc40fC361e9c324e9e690c016A609ac09D4"
 
 overrideContracts:
   taskMailbox:

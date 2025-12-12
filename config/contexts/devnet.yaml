@@ -9,14 +9,14 @@ context:
       chain_id: 31337
       rpc_url: "http://localhost:8545"
       fork:
-        block: 9259079
+        block: 9500000
         url: ""
         block_time: 3
     l2:
       chain_id: 31338
       rpc_url: "http://localhost:9545"
       fork:
-        block: 31408197
+        block: 32000000
         url: ""
         block_time: 3
   # Stake Root Transporter configuration
@@ -26,9 +26,9 @@ context:
     bls_private_key: "0x5f8e6420b9cb0c940e3d3f8b99177980785906d16fb3571f70d7a05ecf5f2172"
     active_stake_roots:
       - chain_id: 31337
-        stake_root: 0x42985973019078c2964a5128f132935504ae6888b94e9c0b3ed20b095299301a
+        stake_root: 0xb96526a64fd377edb35b675328bbd48e6184b4a126cff631c60114b3b400ac6b
       - chain_id: 31338
-        stake_root: 0x42985973019078c2964a5128f132935504ae6888b94e9c0b3ed20b095299301a
+        stake_root: 0xb96526a64fd377edb35b675328bbd48e6184b4a126cff631c60114b3b400ac6b
   # All key material (BLS and ECDSA) within this file should be used for local testing ONLY
   # ECDSA keys used are from Anvil's private key set
   # BLS keystores are deterministically pre-generated and embedded. These are NOT derived from a secure seed
@@ -113,13 +113,13 @@ context:
   # L1 Contracts deployed on `devnet start`
   deployed_l1_contracts:
     - abi: .devkit/contracts/out/ProxyAdmin.sol/ProxyAdmin.json
-      address: 0x152Fc95cdC8FbE85998a3B5985F097a3093100DE
+      address: 0xf4Dc5d7C18e71D728f04AfA31E91EE065D738221
       name: l1ProxyAdmin
     - abi: .devkit/contracts/out/TaskAVSRegistrar.sol/TaskAVSRegistrar.json
-      address: 0x3EC7D050c71BaA842335c95DcD540f12543cA867
+      address: 0x197baBc40fC361e9c324e9e690c016A609ac09D4
       name: taskAVSRegistrar
     - abi: .devkit/contracts/out/TaskAVSRegistrar.sol/TaskAVSRegistrar.json
-      address: 0xF9EC1403FAe9C544B99B19c383f843e467535499
+      address: 0x16C632BafA9b3ce39bdCDdB00c3D486741685425
       name: taskAVSRegistrarImpl
     - abi: .devkit/contracts/out/HelloWorldL1.sol/HelloWorldL1.json
       address: 0xDe75C661C44Ee4456cD63197C8C53Cd5abE20493
@@ -127,7 +127,10 @@ context:
   # L2 Contracts deployed on `devnet start`
   deployed_l2_contracts:
     - abi: .devkit/contracts/out/AVSTaskHook.sol/AVSTaskHook.json
-      address: 0x56186c1e64ca8043DEF78d06Aff222212ea5df71
+      address: 0xE527DDaC2592FAa45884a0B78E4D377a5D3dF8cc
+      name: avsTaskHook
+    - abi: .devkit/contracts/out/AVSTaskHook.sol/AVSTaskHook.json
+      address: 0x7C503301eB8fA9dC7C3d2242487f18598321E479
       name: avsTaskHook
   # Operator Sets registered on `devnet start`
   operator_sets:
@@ -148,7 +151,7 @@ context:
       operator_set_id: 1
       payload: 0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000d6578656375746f723a3930393000000000000000000000000000000000000000
   artifact:
-    artifactId: sha256:c2400bd30165df601ba3845a362bfdd984319305f38334da7c72330554ba9397
+    artifactId: sha256:a23f51005e6109e791be81c0724261a9c4a382a593d9e315d55355f14f3fb398
     component: my-avs-project-performer
     digest: ""
     registry: ""

@@ -27,7 +27,7 @@ avsPerformers:
     avsAddress: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
     workerCount: 1
     signingCurve: "ecdsa"
-    avsRegistrarAddress: "0x3EC7D050c71BaA842335c95DcD540f12543cA867"
+    avsRegistrarAddress: "0x197baBc40fC361e9c324e9e690c016A609ac09D4"
     grpcPort: 8080
     # AGGIUNGI QUESTA SEZIONE per configurare la rete del container
     #networkMode: "host"
@@ -41,19 +41,22 @@ avsPerformers:
         value: "http://host.docker.internal:9545"
         type: plain
       - name: "L1_PROXY_ADMIN"
-        value: "0x152Fc95cdC8FbE85998a3B5985F097a3093100DE"
+        value: "0xf4Dc5d7C18e71D728f04AfA31E91EE065D738221"
         type: plain
       - name: "TASK_AVS_REGISTRAR"
-        value: "0x3EC7D050c71BaA842335c95DcD540f12543cA867"
+        value: "0x197baBc40fC361e9c324e9e690c016A609ac09D4"
         type: plain
       - name: "TASK_AVS_REGISTRAR_IMPL"
-        value: "0xF9EC1403FAe9C544B99B19c383f843e467535499"
+        value: "0x16C632BafA9b3ce39bdCDdB00c3D486741685425"
         type: plain
       - name: "HELLO_WORLD_L1"
         value: "0xDe75C661C44Ee4456cD63197C8C53Cd5abE20493"
         type: plain
       - name: "AVS_TASK_HOOK"
-        value: "0x56186c1e64ca8043DEF78d06Aff222212ea5df71"
+        value: "0xE527DDaC2592FAa45884a0B78E4D377a5D3dF8cc"
+        type: plain
+      - name: "AVS_TASK_HOOK"
+        value: "0x7C503301eB8fA9dC7C3d2242487f18598321E479"
         type: plain
 
 overrideContracts:

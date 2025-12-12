@@ -29,15 +29,12 @@ func (tw *TaskWorker) ValidateTask(req *performerV1.TaskRequest) error {
 		"payloadLength", len(req.Payload),
 	)
 
-	// Verifica che il payload non sia vuoto
 	if len(req.Payload) == 0 {
 		return fmt.Errorf("empty payload")
 	}
 
-	// Il payload dovrebbe essere lungo almeno 128 bytes (4 uint256)
-	// uint256 taskId + uint256 a + uint256 b + uint256 claimedResult
-	if len(req.Payload) < 128 {
-		return fmt.Errorf("invalid payload length: expected at least 128 bytes, got %d", len(req.Payload))
+	if len(req.Payload) < 96 {
+		return fmt.Errorf("invalid payload length: expected at least 96 bytes, got %d", len(req.Payload))
 	}
 
 	tw.logger.Sugar().Info("Task validation successful")
@@ -50,23 +47,20 @@ func (tw *TaskWorker) HandleTask(req *performerV1.TaskRequest) (*performerV1.Tas
 		"taskId", hex.EncodeToString(req.TaskId),
 	)
 
-	// Decodifica il payload: (taskId, a, b, claimedResult)
 	payload := req.Payload
 	
-	// Il payload è ABI-encoded, quindi ogni uint256 occupa 32 bytes
-	if len(payload) < 128 {
+	if len(payload) < 96 {
 		return nil, fmt.Errorf("invalid payload length: %d", len(payload))
 	}
 
-	// Parse i valori dal payload
-	// Offset 0-32: taskId (non ci serve qui)
-	// Offset 32-64: a
-	// Offset 64-96: b
-	// Offset 96-128: claimedResult
+	// Parse i valori dal payload (3 uint256)
+	// Offset 0-32: a
+	// Offset 32-64: b
+	// Offset 64-96: claimedResult
 	
-	a := new(big.Int).SetBytes(payload[32:64])
-	b := new(big.Int).SetBytes(payload[64:96])
-	claimedResult := new(big.Int).SetBytes(payload[96:128])
+	a := new(big.Int).SetBytes(payload[0:32])
+	b := new(big.Int).SetBytes(payload[32:64])
+	claimedResult := new(big.Int).SetBytes(payload[64:96])
 
 	tw.logger.Sugar().Infow("Parsed task data",
 		"a", a.String(),
@@ -76,8 +70,6 @@ func (tw *TaskWorker) HandleTask(req *performerV1.TaskRequest) (*performerV1.Tas
 
 	// Calcola il risultato corretto
 	correctSum := new(big.Int).Add(a, b)
-	
-	// Verifica se il risultato è corretto
 	isCorrect := correctSum.Cmp(claimedResult) == 0
 
 	tw.logger.Sugar().Infow("Sum verification result",
@@ -85,19 +77,20 @@ func (tw *TaskWorker) HandleTask(req *performerV1.TaskRequest) (*performerV1.Tas
 		"isCorrect", isCorrect,
 	)
 
-	// Codifica il risultato (bool) in un byte array
-	var result []byte
+	// Codifica il risultato come ABI-encoded bool (32 bytes)
+	// Un bool in ABI encoding è sempre 32 bytes con il valore nell'ultimo byte
+	result := make([]byte, 32)
 	if isCorrect {
-		result = []byte{1} // true
-	} else {
-		result = []byte{0} // false
+		result[31] = 1 // true - ultimo byte = 1
 	}
+	// false è già rappresentato da tutti 0
 
 	tw.logger.Sugar().Infow("Task processed successfully",
 		"result", isCorrect,
+		"resultBytes", hex.EncodeToString(result),
 	)
 
-	// Ritorna la risposta con il risultato della verifica
+	// Ritorna la risposta con il risultato a 32 bytes
 	return &performerV1.TaskResponse{
 		Result: result,
 	}, nil
@@ -107,7 +100,6 @@ func (tw *TaskWorker) HandleTask(req *performerV1.TaskRequest) (*performerV1.Tas
 func main() {
 	ctx := context.Background()
 	
-	// Inizializza logger
 	logger, err := zap.NewProduction()
 	if err != nil {
 		panic(fmt.Errorf("failed to create logger: %w", err))
@@ -116,10 +108,8 @@ func main() {
 
 	logger.Info("Starting Sum Verification AVS Performer")
 
-	// Crea il TaskWorker con la logica custom
 	worker := NewTaskWorker(logger)
 
-	// Crea il server Hourglass Performer sulla porta 8080
 	performer, err := server.NewPonosPerformerWithRpcServer(&server.PonosPerformerConfig{
 		Port:    8080,
 		Timeout: 5 * time.Second,
@@ -130,7 +120,6 @@ func main() {
 
 	logger.Info("Performer server created, starting on port 8080")
 
-	// Avvia il server (blocking call)
 	if err := performer.Start(ctx); err != nil {
 		panic(fmt.Errorf("failed to start performer: %w", err))
 	}

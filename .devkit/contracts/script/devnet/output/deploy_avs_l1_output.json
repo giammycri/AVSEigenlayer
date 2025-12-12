@@ -1,8 +1,8 @@
 {
   "addresses": {
-    "l1ProxyAdmin": "0x152Fc95cdC8FbE85998a3B5985F097a3093100DE",
-    "taskAVSRegistrar": "0x3EC7D050c71BaA842335c95DcD540f12543cA867",
-    "taskAVSRegistrarImpl": "0xF9EC1403FAe9C544B99B19c383f843e467535499"
+    "l1ProxyAdmin": "0xf4Dc5d7C18e71D728f04AfA31E91EE065D738221",
+    "taskAVSRegistrar": "0x197baBc40fC361e9c324e9e690c016A609ac09D4",
+    "taskAVSRegistrarImpl": "0x16C632BafA9b3ce39bdCDdB00c3D486741685425"
   },
   "chainInfo": {
     "chainId": 31337

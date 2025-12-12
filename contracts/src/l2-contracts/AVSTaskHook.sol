@@ -15,9 +15,11 @@ struct TaskParams {
 /// @title AVSTaskHook
 /// @notice Hook contract for AVS tasks on L2
 contract AVSTaskHook {
-    /// @notice Called before task creation to validate the task
-    /// @param creator Address creating the task
-    /// @param taskParams Task parameters
+    mapping(bytes32 => bytes) public taskResults;
+    mapping(bytes32 => bool) public taskCompleted;
+    
+    event TaskCallbackReceived(bytes32 indexed taskHash, bytes result);
+
     function validatePreTaskCreation(
         address creator,
         TaskParams calldata taskParams
@@ -25,32 +27,62 @@ contract AVSTaskHook {
         // Accept all tasks
     }
 
-    /// @notice Calculate the fee for a task
-    /// @param taskParams Task parameters
-    /// @return fee The fee amount (return 0 for no fee)
     function calculateTaskFee(
         TaskParams calldata taskParams
     ) external pure returns (uint96 fee) {
-        // Return 0 fee (no fee required)
         return 0;
     }
 
-    /// @notice Called after task creation
-    /// @param taskHash Hash of the created task
     function handlePostTaskCreation(
         bytes32 taskHash
     ) external {
-        // Hook for post-creation logic
-        // Can be empty for now
+        // Empty
     }
 
-    /// @notice Called after task execution to validate the result
-    /// @param taskHash Hash of the executed task
-    /// @param result Execution result
+    function validatePreTaskResultSubmission(
+        address sender,
+        bytes32 taskHash,
+        bytes calldata executorCert,
+        bytes calldata result
+    ) external pure {
+        // Accept all
+    }
+
     function validatePostTaskExecution(
         bytes32 taskHash,
         bytes calldata result
     ) external pure {
-        // Accept all results
+        // Accept all
+    }
+
+    /// @notice QUESTO È IL METODO CHE VIENE CHIAMATO DAL TASKMAILBOX
+    function handlePostTaskResultSubmission(
+        address sender,
+        bytes32 taskHash
+    ) external {
+        // Accetta tutto - il contratto può essere vuoto
+    }
+
+    function handleCallback(
+        bytes32 taskHash,
+        bytes calldata result
+    ) external {
+        taskResults[taskHash] = result;
+        taskCompleted[taskHash] = true;
+        emit TaskCallbackReceived(taskHash, result);
+    }
+    
+    function getTaskResult(bytes32 taskHash) external view returns (bytes memory) {
+        require(taskCompleted[taskHash], "Task not completed");
+        return taskResults[taskHash];
+    }
+    
+    function isTaskResultCorrect(bytes32 taskHash) external view returns (bool) {
+        require(taskCompleted[taskHash], "Task not completed");
+        bytes memory result = taskResults[taskHash];
+        if (result.length >= 32) {
+            return uint8(result[31]) == 1;
+        }
+        return false;
     }
 }
