@@ -1,0 +1,294 @@
+{
+  "name": "avsTaskHook",
+  "address": "0x7C503301eB8fA9dC7C3d2242487f18598321E479",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "refundCollector",
+              "type": "address"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "avs",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "id",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct OperatorSet",
+              "name": "executorOperatorSet",
+              "type": "tuple"
+            },
+            {
+              "internalType": "bytes",
+              "name": "payload",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct TaskParams",
+          "name": "taskParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "calculateTaskFee",
+      "outputs": [
+        {
+          "internalType": "uint96",
+          "name": "fee",
+          "type": "uint96"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "taskHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getTaskResult",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "taskHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "result",
+          "type": "bytes"
+        }
+      ],
+      "name": "handleCallback",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "taskHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "handlePostTaskCreation",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "taskHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "handlePostTaskResultSubmission",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "taskHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "isTaskResultCorrect",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "taskCompleted",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "taskResults",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "taskHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "result",
+          "type": "bytes"
+        }
+      ],
+      "name": "validatePostTaskExecution",
+      "outputs": [],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "refundCollector",
+              "type": "address"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "avs",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint32",
+                  "name": "id",
+                  "type": "uint32"
+                }
+              ],
+              "internalType": "struct OperatorSet",
+              "name": "executorOperatorSet",
+              "type": "tuple"
+            },
+            {
+              "internalType": "bytes",
+              "name": "payload",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct TaskParams",
+          "name": "taskParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "validatePreTaskCreation",
+      "outputs": [],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "taskHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "executorCert",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "result",
+          "type": "bytes"
+        }
+      ],
+      "name": "validatePreTaskResultSubmission",
+      "outputs": [],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "taskHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "result",
+          "type": "bytes"
+        }
+      ],
+      "name": "TaskCallbackReceived",
+      "type": "event"
+    }
+  ],
+  "chainInfo": {
+    "chainId": 31338
+  }
+}
