@@ -32,3 +32,19 @@ temp_external/
 .cursor/execution-plans
 {$
 hourglass-monorepo/
+
+# runtime / broadcast artifacts
+.devkit/contracts/broadcast/**/run-*.json
+.devkit/contracts/broadcast/**/dry-run-*.json
+
+# caches
+.devkit/**/cache/
+.hourglass/**/cache/
+
+# python
+__pycache__/
+*.pyc
+
+# solidity / foundry deps
+.devkit/contracts/lib/
+

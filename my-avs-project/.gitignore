@@ -38,3 +38,10 @@ config/contexts/**/*
 
 # Environment
 .env
+
+.devkit/contracts/broadcast/**/run-*.json
+.devkit/contracts/broadcast/**/dry-run-*.json
+
+
+# solidity / foundry deps
+.devkit/contracts/lib/
