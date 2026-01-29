@@ -33,80 +33,82 @@ func (tw *TaskWorker) ValidateTask(req *performerV1.TaskRequest) error {
 		return fmt.Errorf("empty payload")
 	}
 
-	if len(req.Payload) < 96 {
-		return fmt.Errorf("invalid payload length: expected at least 96 bytes, got %d", len(req.Payload))
+	if len(req.Payload) != 96 {
+		return fmt.Errorf("invalid payload length: expected 96 bytes (hash format), got %d", len(req.Payload))
 	}
 
 	tw.logger.Sugar().Info("Task validation successful")
 	return nil
 }
 
-// HandleTask processa i PESI COMPLETI del FL
+// HandleTask processa l'HASH dei pesi del FL
 func (tw *TaskWorker) HandleTask(req *performerV1.TaskRequest) (*performerV1.TaskResponse, error) {
-	tw.logger.Sugar().Infow("Processing FL weights task",
+	tw.logger.Sugar().Infow("Processing FL weights hash task",
 		"taskId", hex.EncodeToString(req.TaskId),
 	)
 
 	payload := req.Payload
 	
-	if len(payload) < 96 {
-		return nil, fmt.Errorf("invalid payload length: %d", len(payload))
+	if len(payload) != 96 {
+		return nil, fmt.Errorf("invalid payload length: expected 96 bytes, got %d", len(payload))
 	}
 
-	// Decode ABI-encoded payload: (bytes weightsData, uint256 clientId, uint256 claimedResult)
+	// Decode ABI-encoded payload: (bytes32 weightsHash, uint256 clientId, uint256 claimedResult)
 	// Struttura ABI:
-	// - Offset 0-32: offset ai bytes dei pesi (tipicamente 96 = 0x60)
+	// - Offset 0-32: weightsHash (bytes32)
 	// - Offset 32-64: clientID (uint256)
 	// - Offset 64-96: claimedResult (uint256)
-	// - Offset 96+: lunghezza e dati effettivi dei pesi
 	
-	weightsOffset := new(big.Int).SetBytes(payload[0:32]).Uint64()
+	weightsHash := payload[0:32]
 	clientID := new(big.Int).SetBytes(payload[32:64])
 	claimedResult := new(big.Int).SetBytes(payload[64:96])
-	
-	// Leggi i pesi effettivi
-	var weightsBytes []byte
-	var weightsSize uint64
-	
-	if weightsOffset < uint64(len(payload)) {
-		// Lunghezza dei pesi (32 bytes all'offset)
-		weightsSize = new(big.Int).SetBytes(payload[weightsOffset:weightsOffset+32]).Uint64()
-		
-		// Dati effettivi dei pesi
-		dataStart := weightsOffset + 32
-		dataEnd := dataStart + weightsSize
-		
-		if dataEnd <= uint64(len(payload)) {
-			weightsBytes = payload[dataStart:dataEnd]
-		}
-	}
 
-	tw.logger.Sugar().Infow("Received FL weights",
+	tw.logger.Sugar().Infow("Received FL weights hash",
 		"clientID", clientID.String(),
 		"claimedResult", claimedResult.String(),
-		"weightsSize", weightsSize,
-		"weightsSizeKB", float64(weightsSize)/1024.0,
+		"weightsHash", hex.EncodeToString(weightsHash),
 	)
 
 	// VALIDAZIONE SEMPLICE
 	// Controlla che:
-	// 1. I pesi non siano vuoti
-	// 2. I pesi non superino 10MB (limite ragionevole)
+	// 1. L'hash non sia vuoto (non tutto zero)
+	// 2. Il clientID sia valido (< 1000)
 	isValid := true
-	validationNote := "Weights accepted"
+	validationNote := "Hash accepted"
 	
-	if len(weightsBytes) == 0 {
+	// Check 1: Hash non vuoto
+	allZeros := true
+	for _, b := range weightsHash {
+		if b != 0 {
+			allZeros = false
+			break
+		}
+	}
+	
+	if allZeros {
 		isValid = false
-		validationNote = "Empty weights rejected"
-	} else if len(weightsBytes) > 10*1024*1024 {
+		validationNote = "Empty hash (all zeros) rejected"
+		tw.logger.Sugar().Warn(validationNote)
+	}
+	
+	// Check 2: ClientID ragionevole
+	if clientID.Cmp(big.NewInt(1000)) > 0 {
 		isValid = false
-		validationNote = "Weights too large (>10MB) rejected"
+		validationNote = "ClientID too large (>1000) rejected"
+		tw.logger.Sugar().Warn(validationNote)
 	}
 
-	tw.logger.Sugar().Infow("FL weights validated",
-		"isValid", isValid,
-		"note", validationNote,
-	)
+	if isValid {
+		tw.logger.Sugar().Infow("✅ FL weights hash VALID",
+			"clientID", clientID.String(),
+			"weightsHash", hex.EncodeToString(weightsHash)[:16]+"...",
+		)
+	} else {
+		tw.logger.Sugar().Warnw("❌ FL weights hash INVALID",
+			"clientID", clientID.String(),
+			"reason", validationNote,
+		)
+	}
 
 	// Codifica risultato come bool (32 bytes)
 	result := make([]byte, 32)
@@ -120,6 +122,7 @@ func (tw *TaskWorker) HandleTask(req *performerV1.TaskRequest) (*performerV1.Tas
 	)
 
 	return &performerV1.TaskResponse{
+		TaskId: req.TaskId,
 		Result: result,
 	}, nil
 }
@@ -134,7 +137,7 @@ func main() {
 	}
 	defer logger.Sync()
 
-	logger.Info("Starting FL Weights AVS Performer")
+	logger.Info("Starting FL Weights Hash AVS Performer")
 
 	worker := NewTaskWorker(logger)
 

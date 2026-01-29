@@ -1,0 +1,1 @@
+quando fai eventualemente il clone della repo, la cartella si deve chiamare devkit-cli, altrimenti è un casino con i vari path

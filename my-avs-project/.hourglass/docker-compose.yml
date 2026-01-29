@@ -8,8 +8,9 @@ networks:
     name: hourglass-local_hourglass-network
 
 services:
-  executor:
-    image: public.ecr.aws/z6g0f8n7/eigenlayer-hourglass:v1.0.0-rc.5_4a2e86b
+  executor1:
+    image: my-hourglass-executor:custom
+    container_name: executor1
     networks:
       - hourglass-network
     extra_hosts:
@@ -18,13 +19,55 @@ services:
       - "executor"
       - "run"
       - "--config"
-      - "/ponos-config/executor.yaml"
+      - "/ponos-config/executor1.yaml"
     volumes:
       - ./config:/ponos-config
       - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9090:9090"
+      - "8081:8081"
+  
+  executor2:
+    image: my-hourglass-executor:custom
+    container_name: executor2
+    networks:
+      - hourglass-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - "executor"
+      - "run"
+      - "--config"
+      - "/ponos-config/executor2.yaml"
+    volumes:
+      - ./config:/ponos-config
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9091:9091"
+      - "8082:8082"
+  
+  executor3:
+    image: my-hourglass-executor:custom
+    container_name: executor3
+    networks:
+      - hourglass-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - "executor"
+      - "run"
+      - "--config"
+      - "/ponos-config/executor3.yaml"
+    volumes:
+      - ./config:/ponos-config
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9092:9092"
+      - "8083:8083"
   
   aggregator:
-    image: public.ecr.aws/z6g0f8n7/eigenlayer-hourglass:v1.0.0-rc.5_4a2e86b
+    image: my-hourglass-executor:custom
+    container_name: aggregator
     networks:
       - hourglass-network
     extra_hosts:

@@ -1,0 +1,65 @@
+---
+
+grpcPort: 9092
+performerNetworkName: "hourglass-local_hourglass-network" 
+managementServerGrpcPort: 8083
+storage:
+  type: "memory"
+
+operator:
+  address: "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
+  operatorPrivateKey:
+    privateKey: "0x92db14e403b83dfe3df233f83dfa3a0d7096f21ca9b0d6d6b8d88b2b4ec1564e"
+  signingKeys:
+    ecdsa:
+      privateKey: "0x92db14e403b83dfe3df233f83dfa3a0d7096f21ca9b0d6d6b8d88b2b4ec1564e"
+
+l1Chain:
+  chainId: "31337"
+  rpcUrl: "http://host.docker.internal:8545" 
+
+avsPerformers:
+  - image:
+      repository: "my-avs-project-performer"
+      tag: "0"
+    processType: "server"
+    avsAddress: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    workerCount: 1
+    signingCurve: "ecdsa"
+    avsRegistrarAddress: "0x197baBc40fC361e9c324e9e690c016A609ac09D4"
+    grpcPort: 8080
+    envs:
+      - name: "L1_RPC_URL"
+        value: "http://host.docker.internal:8545"
+        type: plain
+      - name: "L2_RPC_URL"
+        value: "http://host.docker.internal:9545"
+        type: plain
+      - name: "L1_PROXY_ADMIN"
+        value: "0xf4Dc5d7C18e71D728f04AfA31E91EE065D738221"
+        type: plain
+      - name: "TASK_AVS_REGISTRAR"
+        value: "0x197baBc40fC361e9c324e9e690c016A609ac09D4"
+        type: plain
+      - name: "TASK_AVS_REGISTRAR_IMPL"
+        value: "0x16C632BafA9b3ce39bdCDdB00c3D486741685425"
+        type: plain
+      - name: "HELLO_WORLD_L1"
+        value: "0xDe75C661C44Ee4456cD63197C8C53Cd5abE20493"
+        type: plain
+      - name: "AVS_TASK_HOOK"
+        value: "0xE527DDaC2592FAa45884a0B78E4D377a5D3dF8cc"
+        type: plain
+
+overrideContracts:
+  taskMailbox:
+    chainIds: [31337]
+    contract: |
+      {
+          "name": "TaskMailbox",
+          "address": "0xB99CC53e8db7018f557606C2a5B066527bF96b26",
+          "chainId":  31338,
+          "abiVersions": [
+              "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_bn254CertificateVerifier\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_ecdsaCertificateVerifier\",\"type\":\"address\"},{\"internalType\":\"uint96\",\"name\":\"_maxTaskSLA\",\"type\":\"uint96\"},{\"internalType\":\"string\",\"name\":\"_version\",\"type\":\"string\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"CertificateStale\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EmptyCertificateSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ExecutorOperatorSetNotRegistered\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ExecutorOperatorSetTaskConfigNotSet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FeeAlreadyRefunded\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidCertificate\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidTaskExecutorFee\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidTaskId\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidTaskSLA\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"MsgValueTooBig\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OnlyEigenLayerAllocationManager\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OnlyOperatorsFromOperatorSet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OnlyTaskCaller\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"QuorumNotMet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TaskAlreadyResponded\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TaskExecutorFeeImmutable\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TaskExecutorFeeNotSet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TaskExpired\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TaskNotResponded\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Unauthorized\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"taskId\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"executorOperatorSetId\",\"type\":\"uint32\"},{\"indexed\":false,\"internalType\":\"uint96\",\"name\":\"taskExecutorFee\",\"type\":\"uint96\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"taskRequest\",\"type\":\"bytes\"}],\"name\":\"TaskCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"executorOperatorSetId\",\"type\":\"uint32\"},{\"indexed\":false,\"internalType\":\"uint96\",\"name\":\"taskExecutorFee\",\"type\":\"uint96\"}],\"name\":\"TaskExecutorFeeSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"taskId\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"refundRecipient\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint96\",\"name\":\"taskExecutorFee\",\"type\":\"uint96\"}],\"name\":\"TaskFeeRefunded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"taskId\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"taskResponse\",\"type\":\"bytes\"}],\"name\":\"TaskResponded\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"executorOperatorSetId\",\"type\":\"uint32\"}],\"name\":\"computeTaskId\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"executorOperatorSetId\",\"type\":\"uint32\"},{\"internalType\":\"bytes\",\"name\":\"taskRequest\",\"type\":\"bytes\"}],\"name\":\"createTask\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"taskId\",\"type\":\"bytes32\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"name\":\"executorOperatorSetTaskConfig\",\"outputs\":[{\"internalType\":\"uint96\",\"name\":\"taskExecutorFee\",\"type\":\"uint96\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"maxTaskSLA\",\"outputs\":[{\"internalType\":\"uint96\",\"name\":\"\",\"type\":\"uint96\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"taskId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"refundRecipient\",\"type\":\"address\"}],\"name\":\"refundTaskFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"taskId\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"taskResponse\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"certificate\",\"type\":\"bytes\"}],\"internalType\":\"struct ITaskMailboxTypes.TaskResponse\",\"name\":\"taskResponse\",\"type\":\"tuple\"}],\"name\":\"respondToTask\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"executorOperatorSetId\",\"type\":\"uint32\"},{\"internalType\":\"uint96\",\"name\":\"taskExecutorFee\",\"type\":\"uint96\"}],\"name\":\"setTaskExecutorFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"tasks\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"avs\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"executorOperatorSetId\",\"type\":\"uint32\"},{\"internalType\":\"uint96\",\"name\":\"taskExecutorFee\",\"type\":\"uint96\"},{\"internalType\":\"uint64\",\"name\":\"createdAt\",\"type\":\"uint64\"},{\"internalType\":\"bool\",\"name\":\"responded\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]"
+          ]
+      }

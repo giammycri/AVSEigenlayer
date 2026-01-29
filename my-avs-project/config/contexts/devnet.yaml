@@ -26,9 +26,9 @@ context:
     bls_private_key: "0x5f8e6420b9cb0c940e3d3f8b99177980785906d16fb3571f70d7a05ecf5f2172"
     active_stake_roots:
       - chain_id: 31337
-        stake_root: 0xb96526a64fd377edb35b675328bbd48e6184b4a126cff631c60114b3b400ac6b
+        stake_root: 0x198f83fed8c5fd4496010c90d507ff07d227ed41d4bc83b96957844b6bbb5f3c
       - chain_id: 31338
-        stake_root: 0xb96526a64fd377edb35b675328bbd48e6184b4a126cff631c60114b3b400ac6b
+        stake_root: 0x198f83fed8c5fd4496010c90d507ff07d227ed41d4bc83b96957844b6bbb5f3c
   # All key material (BLS and ECDSA) within this file should be used for local testing ONLY
   # ECDSA keys used are from Anvil's private key set
   # BLS keystores are deterministically pre-generated and embedded. These are NOT derived from a secure seed
@@ -37,20 +37,36 @@ context:
   app_private_key: "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a" # Anvil Private Key 2
   # List of stakers and their delegations - RIDOTTO A 2 STAKERS
   stakers:
-    - address: "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720"
+    - address: "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720" # Anvil #9
       ecdsa_key: "0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6"
       deposits:
         - strategy_address: "0x8b29d91e67b013e855EaFe0ad704aC4Ab086a574"
           name: "stETH_Strategy"
           deposit_amount: "5ETH"
       operator: "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
-    - address: "0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f"
+    - address: "0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f" # Anvil #8
       ecdsa_key: "0xdbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97"
       deposits:
         - strategy_address: "0x8b29d91e67b013e855EaFe0ad704aC4Ab086a574"
           name: "stETH_Strategy"
           deposit_amount: "5ETH"
       operator: "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+    # CAMBIA: Usa Anvil #7 invece del duplicato #9
+    - address: "0x14dC79964da2C08b23698B3D3cc7Ca32193d9955" # Anvil #7
+      ecdsa_key: "0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356"
+      deposits:
+        - strategy_address: "0x8b29d91e67b013e855EaFe0ad704aC4Ab086a574"
+          name: "stETH_Strategy"
+          deposit_amount: "5ETH"
+      operator: "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc"
+    # CAMBIA: Usa Anvil #2 invece dell'indirizzo inesistente
+    - address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" # Anvil #2
+      ecdsa_key: "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a"
+      deposits:
+        - strategy_address: "0x8b29d91e67b013e855EaFe0ad704aC4Ab086a574"
+          name: "stETH_Strategy"
+          deposit_amount: "5ETH"
+      operator: "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
   # List of Operators - RIDOTTO A 2 OPERATORI (1 aggregator + 1 executor)
   operators:
     # OPERATORE 1 - Aggregator (operatorSet 0)
@@ -85,6 +101,38 @@ context:
           operator_set_allocations:
             - operator_set: "1"
               allocation_in_wads: "1000000000000000000" # 100% allocation
+              # OPERATORE 3 - Executor 2 (operatorSet 1)
+    - address: "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc"
+      ecdsa_key: "0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba"
+      keystores:
+        - avs: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+          operatorSet: 1
+          ecdsa_keystore_path: "keystores/operator3.ecdsa.keystore.json"
+          ecdsa_keystore_password: "testpass"
+          bls_keystore_path: "keystores/operator3.bls.keystore.json"
+          bls_keystore_password: "testpass"
+      allocations:
+        - strategy_address: "0x8b29d91e67b013e855EaFe0ad704aC4Ab086a574"
+          name: "stETH_Strategy"
+          operator_set_allocations:
+            - operator_set: "1"
+              allocation_in_wads: "1000000000000000000"
+    # OPERATORE 4 - Executor 3 (operatorSet 1)
+    - address: "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
+      ecdsa_key: "0x92db14e403b83dfe3df233f83dfa3a0d7096f21ca9b0d6d6b8d88b2b4ec1564e"
+      keystores:
+        - avs: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+          operatorSet: 1
+          ecdsa_keystore_path: "keystores/operator4.ecdsa.keystore.json"
+          ecdsa_keystore_password: "testpass"
+          bls_keystore_path: "keystores/operator4.bls.keystore.json"
+          bls_keystore_password: "testpass"
+      allocations:
+        - strategy_address: "0x8b29d91e67b013e855EaFe0ad704aC4Ab086a574"
+          name: "stETH_Strategy"
+          operator_set_allocations:
+            - operator_set: "1"
+              allocation_in_wads: "1000000000000000000"
   # AVS configuration
   avs:
     address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
@@ -149,9 +197,15 @@ context:
       payload: 0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000f61676772656761746f723a393030300000000000000000000000000000000000
     - address: 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
       operator_set_id: 1
-      payload: 0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000d6578656375746f723a3930393000000000000000000000000000000000000000
+      payload: 0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000e6578656375746f72313a39303930000000000000000000000000000000000000
+    - address: 0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc
+      operator_set_id: 1
+      payload: 0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000e6578656375746f72323a39303931000000000000000000000000000000000000
+    - address: 0x976EA74026E726554dB657fA54763abd0C3a0aa9
+      operator_set_id: 1
+      payload: 0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000e6578656375746f72333a39303932000000000000000000000000000000000000
   artifact:
-    artifactId: sha256:71465f02ef6f3fe4a31e148d55eb9caf5c9c6bf50df216698f2db3cc300e8f86
+    artifactId: sha256:5e2ffe81f74b6a52d117d86de01de66d91c9f435064b80b7b928a77d1320be00
     component: my-avs-project-performer
     digest: ""
     registry: ""

@@ -52,7 +52,7 @@ contract SetupAVSTaskMailboxConfig is Script {
             feeCollector: address(0),
             consensus: ITaskMailboxTypes.Consensus({
                 consensusType: ITaskMailboxTypes.ConsensusType.STAKE_PROPORTION_THRESHOLD,
-                value: abi.encode(6667)
+                value: abi.encode(1000)
             }),
             taskMetadata: bytes("")
         });

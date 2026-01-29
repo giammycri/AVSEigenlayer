@@ -31,3 +31,4 @@ temp_external/
 /test-projects
 .cursor/execution-plans
 {$
+hourglass-monorepo/

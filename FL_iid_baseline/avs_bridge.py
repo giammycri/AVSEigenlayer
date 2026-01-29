@@ -157,29 +157,8 @@ class AVSBridge:
         print(f"   Payload totale (con ABI): {len(payload):,} bytes ({len(payload)/1024:.2f} KB)")
         
         try:
-            # Stima gas
-            try:
-                if self.account:
-                    gas_estimate = self.contract.functions.submitTask(payload).estimate_gas({
-                        'from': self.account.address
-                    })
-                else:
-                    gas_estimate = self.contract.functions.submitTask(payload).estimate_gas({
-                        'from': self.w3.eth.accounts[0]
-                    })
-                
-                # Calcola costo stimato (assumendo 1 gwei = 1e-9 ETH)
-                gas_price_gwei = self.w3.eth.gas_price / 1e9
-                cost_eth = gas_estimate * gas_price_gwei / 1e9
-                
-                print(f"   💰 Gas stimato: {gas_estimate:,}")
-                print(f"   💰 Costo stimato: {cost_eth:.6f} ETH @ {gas_price_gwei:.2f} gwei")
-            except Exception as e:
-                print(f"   ⚠️  Impossibile stimare gas: {e}")
-                gas_estimate = 10000000  # 10M gas come fallback
-            
-            # Prepara transazione con gas maggiorato del 20%
-            gas_limit = int(gas_estimate * 1.2)
+            # Gas limit alto per sicurezza
+            gas_limit = 10000000  # 10M gas
             
             if self.account:
                 # Usa account specifico
@@ -201,17 +180,19 @@ class AVSBridge:
                 })
             
             print(f"   TX Hash: {tx_hash.hex()[:18]}...")
+            print(f"   ⏳ Attendo conferma...")
             
             # Attendi conferma
             receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
             
             if receipt['status'] == 1:
                 gas_used = receipt['gasUsed']
+                gas_price_gwei = self.w3.eth.gas_price / 1e9
                 cost_actual = gas_used * gas_price_gwei / 1e9
                 
                 print(f"   ✅ Transazione confermata")
                 print(f"   💰 Gas usato: {gas_used:,} (Block: {receipt['blockNumber']})")
-                print(f"   💰 Costo effettivo: {cost_actual:.6f} ETH")
+                print(f"   💰 Costo: {cost_actual:.6f} ETH @ {gas_price_gwei:.2f} gwei")
                 
                 return {
                     'valid': True,
@@ -277,7 +258,7 @@ if __name__ == "__main__":
     # Inizializza bridge
     bridge = AVSBridge(
         rpc_url="http://localhost:8545",
-        contract_address="0xB99CC53e8db7018f557606C2a5B066527bF96b26"  # Inserisci indirizzo del TaskMailbox
+        contract_address="0xB99CC53e8db7018f557606C2a5B066527bF96b26"
     )
     
     # Carica contratto
